@@ -84,7 +84,7 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 
 			return $block_assets;
 		}
-		
+
 		/**
 		 * Get frontend CSS.
 		 *
@@ -161,7 +161,7 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 
 					if ( file_exists( $attr_file ) ) {
 
-						$default_attr = include $attr_file;
+						$default_attr = apply_filters( 'uagb_block_default_attributes', include $attr_file, $blocks[ $slug ]['dir'] );
 
 						$attr = self::get_fallback_values( $default_attr, $attr );
 					}

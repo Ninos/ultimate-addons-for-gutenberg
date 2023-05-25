@@ -1430,11 +1430,11 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 							$position_value                    = $x_position . $x_position_type . ' ' . $y_position . $y_position_type;
 							$gen_bg_css['background-position'] = $position_value;
 						}
-		
+
 						if ( isset( $size ) ) {
 							$gen_bg_css['background-size'] = esc_attr( $size );
 						}
-		
+
 						if ( isset( $attachment ) ) {
 							$gen_bg_css['background-attachment'] = esc_attr( $attachment );
 						}
@@ -1637,7 +1637,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 			if ( 'default' === $attr[ $prefix . 'BorderStyle' ] ) {
 				return array();
 			}
-			
+
 			return $gen_border_css;
 		}
 
@@ -1652,9 +1652,9 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 		 * @param string $border_style Border Style.
 		 */
 		public static function uag_generate_deprecated_border_css( $current_css, $border_width, $border_radius, $border_color = '', $border_style = '' ) {
-			
+
 			$gen_border_css = array();
-			
+
 			if ( ! empty( $current_css ) && isset( $current_css['border-style'] ) && 'default' !== $current_css['border-style'] ) {
 
 				$border_width  = is_numeric( $border_width ) ? $border_width : '';
@@ -1707,7 +1707,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 		 * @return array              All default attributes for the specified block.
 		 */
 		private static function get_block_default_attributes( $block_name ) {
-			return require UAGB_DIR . 'includes/blocks/' . $block_name . '/attributes.php';
+			return apply_filters( 'uagb_block_default_attributes', require UAGB_DIR . 'includes/blocks/' . $block_name . '/attributes.php', $block_name );
 		}
 
 		/**
@@ -1766,7 +1766,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 			}
 
 			$alignment_property = $alignment_array[ $pos - 1 ];
-		
+
 			switch ( $format ) {
 				case 'flex':
 					switch ( $alignment_property ) {
@@ -1872,11 +1872,11 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 
 		/**
 		 * Generate the Box Shadow or Text Shadow CSS.
-		 * 
+		 *
 		 * For Text Shadow CSS:
 		 * ( 'spread', 'position' ) should not be sent as params during the function call.
 		 * ( 'spread_unit' ) will have no effect.
-		 * 
+		 *
 		 * For Box/Text Shadow Hover CSS:
 		 * ( 'alt_color' ) should be set as the attribute used for ( 'color' ) in Box/Text Shadow Normal CSS.
 		 *
@@ -1930,7 +1930,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 			if ( ( 0 === $horizontal && 0 === $vertical ) && ( 0 === $blur && 0 === $spread ) ) {
 				return '';
 			}
-			
+
 			// Return the CSS with horizontal, vertical, blur, and color - and conditionally render spread and position.
 			return (
 				$horizontal . ' ' . $vertical . ' ' . $blur . ( $spread ? " {$spread}" : '' ) . ' ' . ( $color ? $color : $alt_color ) . ( 'outset' === $position ? '' : " {$position}" )
