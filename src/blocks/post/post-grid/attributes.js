@@ -1176,6 +1176,10 @@ const attributes = {
 			styleType: 'cta-letter-spacing-type',
 		},
 	},
+	useSeparateBoxShadows: {
+		type: 'boolean',
+		default: true,
+	},
 	boxShadowColor: {
 		type: 'string',
 		default: '#00000070',
@@ -1270,6 +1274,10 @@ const attributes = {
 	imageRatio: {
 		type: 'string',
 		default: 'inherit',
+	},
+	paginationType: {
+		type: 'string',
+		default: 'ajax',
 	},
 	...btnBorderAttributes,
 	...overallBorderAttributes,

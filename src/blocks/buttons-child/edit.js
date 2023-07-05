@@ -22,7 +22,8 @@ const ButtonsChildComponent = ( props ) => {
 		attributes: { borderStyle, borderWidth, borderRadius, borderHColor, borderColor },
 		setAttributes,
 		name,
-		deviceType
+		deviceType,
+		context,
 	} = props;
 
 	const initialState = {
@@ -64,6 +65,10 @@ const ButtonsChildComponent = ( props ) => {
 			);
 		}
 	}, [] );
+
+	useEffect( () => {
+		setAttributes( { context } );
+	}, [ context ] )
 
 	useEffect( () => {
 		scrollBlockToView();

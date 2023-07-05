@@ -12,6 +12,10 @@ import newSaveV2_0_14 from './deprecated/v2.0.14/save';
 
 import newAttributesV2_1_1 from './deprecated/v2.1.1/attributes';
 import newSaveV2_1_1 from './deprecated/v2.1.1/save';
+import saveV2_6_2 from './deprecated/v2.6.2/save';
+import saveV2_6_7 from './deprecated/v2.6.7/save';
+import attributesV2_6_2 from './attributes';
+
 const borderAttributes = getBorderAttributes( 'btn' );
 const attributes = {
 	inheritFromTheme: {
@@ -245,6 +249,14 @@ const deprecated = [
 		attributes: newAttributesV2_1_1,
 		save: newSaveV2_1_1,
 	},
+	{
+		attributes: attributesV2_6_2,
+		save: saveV2_6_2,
+	},
+	{
+		attributes: attributesV2_6_2,
+		save: saveV2_6_7,
+	}
 ];
 
 export default deprecated;
