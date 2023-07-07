@@ -192,7 +192,7 @@ $m_selectors['.uagb-social-share__outer-wrap'] = array(
 
 if ( ! $attr['childMigrate'] ) {
 
-	$defaults = UAGB_DIR . 'includes/blocks/social-share-child/attributes.php';
+	$defaults = apply_filters( 'uagb_block_default_attributes', include UAGB_DIR . 'includes/blocks/social-share-child/attributes.php', 'social-share-child' );
 
 	if ( file_exists( $defaults ) ) {
 		$default_attr = include $defaults;
