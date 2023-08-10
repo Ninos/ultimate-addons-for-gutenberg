@@ -1729,8 +1729,14 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 		 * @param string $block_name  Name of the block to retrieve defaults.
 		 * @return array              All default attributes for the specified block.
 		 */
-		private static function get_block_default_attributes( $block_name ) {
-			return apply_filters( 'uagb_block_default_attributes', require UAGB_DIR . 'includes/blocks/' . $block_name . '/attributes.php', $block_name );
+		public static function get_block_default_attributes( $block_name ) {
+			$file = UAGB_DIR . 'includes/blocks/' . $block_name . '/attributes.php';
+
+			if( ! file_exists( $file ) ) {
+				return [];
+			}
+
+			return apply_filters( 'uagb_block_default_attributes', require $file, $block_name );
 		}
 
 		/**

@@ -174,7 +174,7 @@ if ( $attr['childMigrate'] ) {
 
 if ( ! $attr['childMigrate'] ) {
 
-	$defaults = apply_filters( 'uagb_block_default_attributes', include UAGB_DIR . 'includes/blocks/buttons-child/attributes.php', 'buttons-child' );
+	$defaults = UAGB_Block_Helper::get_block_default_attributes( 'buttons-child' );
 
 	foreach ( $attr['buttons'] as $key => $button ) {
 

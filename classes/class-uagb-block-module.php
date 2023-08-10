@@ -161,7 +161,7 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 
 					if ( file_exists( $attr_file ) ) {
 
-						$default_attr = apply_filters( 'uagb_block_default_attributes', include $attr_file, $blocks[ $slug ]['dir'] );
+						$default_attr = UAGB_Block_Helper::get_block_default_attributes( $blocks[ $slug ]['dir'] );
 
 						$attr = self::get_fallback_values( $default_attr, $attr );
 					}
