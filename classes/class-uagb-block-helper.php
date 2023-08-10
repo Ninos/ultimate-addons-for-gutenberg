@@ -1752,7 +1752,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 		}
 
 		/**
-		 * Get a Block's Default Attributes.
+		 * Return a Block's Default Attributes.
 		 *
 		 * @param string $block_name  Name of the block to retrieve defaults.
 		 * @return array              All default attributes for the specified block.

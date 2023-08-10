@@ -157,14 +157,9 @@ if ( ! class_exists( 'UAGB_Block_Module' ) ) {
 				if ( file_exists( $assets_file ) ) {
 
 					// Set default attributes.
-					$attr_file = $block_dir . '/attributes.php';
+					$default_attr = UAGB_Block_Helper::get_block_default_attributes( $blocks[ $slug ]['dir'] );
 
-					if ( file_exists( $attr_file ) ) {
-
-						$default_attr = UAGB_Block_Helper::get_block_default_attributes( $blocks[ $slug ]['dir'] );
-
-						$attr = self::get_fallback_values( $default_attr, $attr );
-					}
+					$attr = self::get_fallback_values( $default_attr, $attr );
 
 					// Get Assets.
 					$assets = include $assets_file;
