@@ -1758,7 +1758,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 		 * @return array              All default attributes for the specified block.
 		 */
 		public static function get_block_default_attributes( $block_name ) {
-			$file = UAGB_DIR . 'includes/blocks/' . $block_name . '/attributes.php';
+			$file = UAGB_DIR . sprintf( 'includes/blocks/%s/attributes.php', sanitize_file_name( $block_name ) );
 
 			if( ! file_exists( $file ) ) {
 				return [];
