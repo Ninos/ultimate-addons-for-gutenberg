@@ -206,15 +206,9 @@ if ( ! $attr['childMigrate'] ) {
 
 	$defaults = UAGB_Block_Helper::get_block_default_attributes( 'social-share-child' );
 
-	if ( file_exists( $defaults ) ) {
-		$default_attr = include $defaults;
-	}
-
-	$default_attr = ( ! empty( $default_attr ) && is_array( $default_attr ) ) ? $default_attr : array();
-
 	foreach ( $attr['socials'] as $key => $socials ) {
 
-		$socials                        = array_merge( $default_attr, (array) $socials );
+		$socials                        = array_merge( $defaults, (array) $socials );
 		$socials['icon_color']          = ( isset( $socials['icon_color'] ) ) ? $socials['icon_color'] : '';
 		$socials['icon_hover_color']    = ( isset( $socials['icon_hover_color'] ) ) ? $socials['icon_hover_color'] : '';
 		$socials['icon_bg_color']       = ( isset( $socials['icon_bg_color'] ) ) ? $socials['icon_bg_color'] : '';
