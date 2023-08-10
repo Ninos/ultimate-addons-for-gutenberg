@@ -1760,11 +1760,15 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 		public static function get_block_default_attributes( $block_name ) {
 			$file = UAGB_DIR . sprintf( 'includes/blocks/%s/attributes.php', sanitize_file_name( $block_name ) );
 
-			if( ! file_exists( $file ) ) {
-				return [];
+			if( file_exists( $file ) ) {
+				$attributes = require $file;
 			}
 
-			return apply_filters( 'uagb_block_default_attributes', require $file, $block_name );
+			if( ! isset( $attributes ) || ! is_array( $attributes ) ) {
+				$attributes = [];
+			}
+
+			return apply_filters( 'uagb_block_default_attributes', $attributes, $block_name );
 		}
 
 		/**
