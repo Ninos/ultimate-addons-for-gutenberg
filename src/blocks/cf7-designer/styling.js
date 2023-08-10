@@ -9,8 +9,10 @@ import generateCSS from '@Controls/generateCSS';
 import generateCSSUnit from '@Controls/generateCSSUnit';
 import generateBorderCSS from '@Controls/generateBorderCSS';
 
-function styling( attributes, clientId ) {
+function styling( attributes, clientId, deviceType ) {
+	const previewType = deviceType.toLowerCase();
 	const {
+		block_id,
 		align,
 		fieldBgColor,
 		fieldLabelColor,
@@ -627,13 +629,26 @@ function styling( attributes, clientId ) {
 		' .wpcf7 select.wpcf7-form-control.wpcf7-select:not([multiple="multiple"])': fieldPaddingMobile,
 		' .wpcf7 select.wpcf7-select[multiple="multiple"] option': fieldPaddingMobile,
 	};
-	const id = `.editor-styles-wrapper .uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const id = `.editor-styles-wrapper .uagb-block-${ block_id }`;
 	let stylingCss = generateCSS( selectors, `${ id }` );
 
-	stylingCss += generateCSS( tabletSelectors, `${ id }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		stylingCss += generateCSS(
+			tabletSelectors,
+			`${ id }`,
+			true,
+			'tablet'
+		);
 
-	stylingCss += generateCSS( mobileSelectors, `${ id }`, true, 'mobile' );
-
+		if( 'mobile' === previewType ){
+			stylingCss += generateCSS(
+				mobileSelectors,
+				`${ id }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return stylingCss;
 }
 

@@ -132,7 +132,7 @@ const attributes = {
 	},
 	nameFontWeight: {
 		type: 'string',
-		default: '500',
+		default: 'Default',
 		UAGCopyPaste: {
 			styleType: 'author-font-weight',
 		},
@@ -989,6 +989,13 @@ const attributes = {
 		default: false,
 		UAGCopyPaste: {
 			styleType: 'post-equal-height',
+		},
+	},
+	vAlignContent: {
+		type: 'string',
+		default: 'flex-start',
+		UAGCopyPaste: {
+			styleType: 'post-valign-content',
 		},
 	},
 	...overallBorderAttributes,

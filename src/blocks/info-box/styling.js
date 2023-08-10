@@ -7,8 +7,10 @@ import generateCSSUnit from '@Controls/generateCSSUnit';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 import generateBorderCSS from '@Controls/generateBorderCSS';
 
-function styling( attributes, clientId, name ) {
+function styling( attributes, clientId, name, deviceType ) {
+	const previewType = deviceType.toLowerCase();
 	const {
+		block_id,
 		headingAlign,
 		headingAlignTablet,
 		headingAlignMobile,
@@ -17,6 +19,8 @@ function styling( attributes, clientId, name ) {
 		prefixColor,
 		prefixFontSize,
 		prefixFontSizeType,
+		prefixFontSizeTypeMobile,
+		prefixFontSizeTypeTablet,
 		prefixFontSizeTablet,
 		prefixFontSizeMobile,
 		prefixFontFamily,
@@ -31,6 +35,8 @@ function styling( attributes, clientId, name ) {
 		prefixLetterSpacingType,
 		headFontSize,
 		headFontSizeType,
+		headFontSizeTypeMobile,
+		headFontSizeTypeTablet,
 		headFontSizeTablet,
 		headFontSizeMobile,
 		headFontFamily,
@@ -45,6 +51,8 @@ function styling( attributes, clientId, name ) {
 		headLetterSpacingType,
 		subHeadFontSize,
 		subHeadFontSizeType,
+		subHeadFontSizeTypeMobile,
+		subHeadFontSizeTypeTablet,
 		subHeadFontSizeTablet,
 		subHeadFontSizeMobile,
 		subHeadFontFamily,
@@ -73,6 +81,8 @@ function styling( attributes, clientId, name ) {
 		ctaLinkColor,
 		ctaFontSize,
 		ctaFontSizeType,
+		ctaFontSizeTypeMobile,
+		ctaFontSizeTypeTablet,
 		ctaFontSizeMobile,
 		ctaFontSizeTablet,
 		ctaLineHeightType,
@@ -478,7 +488,7 @@ function styling( attributes, clientId, name ) {
 			'margin-top': generateCSSUnit( subHeadMarginTopTablet, subHeadTabletMarginUnit ),
 			'margin-left': generateCSSUnit( subHeadMarginLeftTablet, subHeadTabletMarginUnit ),
 			'margin-right': generateCSSUnit( subHeadMarginRightTablet, subHeadTabletMarginUnit ),
-			'font-size': generateCSSUnit( subHeadFontSizeTablet, subHeadFontSizeType ),
+			'font-size': generateCSSUnit( subHeadFontSizeTablet, subHeadFontSizeTypeTablet ),
 			'line-height': generateCSSUnit( subHeadLineHeightTablet, subHeadLineHeightType ),
 			'letter-spacing': generateCSSUnit( subHeadLetterSpacingTablet, subHeadLetterSpacingType ),
 		},
@@ -487,7 +497,7 @@ function styling( attributes, clientId, name ) {
 			'margin-bottom': generateCSSUnit( headTabletSpace, headTabletMarginUnit ),
 			'margin-left': generateCSSUnit( headMarginLeftTablet, headTabletMarginUnit ),
 			'margin-right': generateCSSUnit( headMarginRightTablet, headTabletMarginUnit ),
-			'font-size': generateCSSUnit( headFontSizeTablet, headFontSizeType ),
+			'font-size': generateCSSUnit( headFontSizeTablet, headFontSizeTypeTablet ),
 			'line-height': generateCSSUnit( headLineHeightTablet, headLineHeightType ),
 			'letter-spacing': generateCSSUnit( headLetterSpacingTablet, headLetterSpacingType ),
 		},
@@ -496,7 +506,7 @@ function styling( attributes, clientId, name ) {
 			'margin-top': generateCSSUnit( prefixMarginTopTablet, prefixTabletMarginUnit ),
 			'margin-left': generateCSSUnit( prefixMarginLeftTablet, prefixTabletMarginUnit ),
 			'margin-right': generateCSSUnit( prefixMarginRightTablet, prefixTabletMarginUnit ),
-			'font-size': generateCSSUnit( prefixFontSizeTablet, prefixFontSizeType ),
+			'font-size': generateCSSUnit( prefixFontSizeTablet, prefixFontSizeTypeTablet ),
 			'line-height': generateCSSUnit( prefixLineHeightTablet, prefixLineHeightType ),
 			'letter-spacing': generateCSSUnit( prefixLetterSpacingTablet, prefixLetterSpacingType ),
 		},
@@ -579,7 +589,7 @@ function styling( attributes, clientId, name ) {
 			'padding-left': generateCSSUnit( iconMarginLeftMobile, iconMobileMarginUnit ),
 		},
 		' .block-editor-rich-text__editable.uagb-ifb-desc': {
-			'font-size': generateCSSUnit( subHeadFontSizeMobile, subHeadFontSizeType ),
+			'font-size': generateCSSUnit( subHeadFontSizeMobile, subHeadFontSizeTypeMobile ),
 			'line-height': generateCSSUnit( subHeadLineHeightMobile, subHeadLineHeightType ),
 			'letter-spacing': generateCSSUnit( subHeadLetterSpacingMobile, subHeadLetterSpacingType ),
 			'margin-bottom': generateCSSUnit( subHeadMobileSpace, subHeadMobileMarginUnit ),
@@ -588,7 +598,7 @@ function styling( attributes, clientId, name ) {
 			'margin-right': generateCSSUnit( subHeadMarginRightMobile, subHeadMobileMarginUnit ),
 		},
 		' .block-editor-rich-text__editable.uagb-ifb-title': {
-			'font-size': generateCSSUnit( headFontSizeMobile, headFontSizeType ),
+			'font-size': generateCSSUnit( headFontSizeMobile, headFontSizeTypeMobile ),
 			'line-height': generateCSSUnit( headLineHeightMobile, headLineHeightType ),
 			'letter-spacing': generateCSSUnit( headLetterSpacingMobile, headLetterSpacingType ),
 			'margin-top': generateCSSUnit( headMarginTopMobile, headMobileMarginUnit ),
@@ -597,7 +607,7 @@ function styling( attributes, clientId, name ) {
 			'margin-right': generateCSSUnit( headMarginRightMobile, headMobileMarginUnit ),
 		},
 		' .block-editor-rich-text__editable.uagb-ifb-title-prefix': {
-			'font-size': generateCSSUnit( prefixFontSizeMobile, prefixFontSizeType ),
+			'font-size': generateCSSUnit( prefixFontSizeMobile, prefixFontSizeTypeMobile ),
 			'line-height': generateCSSUnit( prefixLineHeightMobile, prefixLineHeightType ),
 			'letter-spacing': generateCSSUnit( prefixLetterSpacingMobile, prefixLetterSpacingType ),
 			'margin-bottom': generateCSSUnit( prefixMobileSpace, prefixMobileMarginUnit ),
@@ -652,10 +662,10 @@ function styling( attributes, clientId, name ) {
 			'width': generateCSSUnit( seperatorWidthFallbackMobile, separatorWidthType ),
 		},
 		' .uagb-infobox-cta-link svg': {
-			'font-size': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeType ),
-			'height': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeType ),
-			'line-height': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeType ),
-			'width': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeType ),
+			'font-size': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeTypeMobile ),
+			'height': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeTypeMobile ),
+			'line-height': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeTypeMobile ),
+			'width': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeTypeMobile ),
 		},
 		' .uagb-ifb-content .uagb-ifb-icon-wrap svg': {
 			'font-size': generateCSSUnit( iconSizeFallbackMobile, iconSizeType ),
@@ -763,26 +773,37 @@ function styling( attributes, clientId, name ) {
 			'width': generateCSSUnit( imageWidthFallbackMobile, imageWidthUnitMobile ),
 		};
 	}
+    
+	const ctaIconSpacing = generateCSSUnit( ctaIconSpaceFallback, ctaIconSpaceType );
+	const ctaIconSpacingTablet = generateCSSUnit( ctaIconSpaceFallbackTablet, ctaIconSpaceType );
+	const ctaIconSpacingMobile = generateCSSUnit( ctaIconSpaceFallbackMobile, ctaIconSpaceType );
 
 	if ( 'after' === ctaIconPosition ) {
+
+		const rightSideMargin = uagb_blocks_info.is_rtl === '1' ? 'margin-right' : 'margin-left';
+
 		selectors[ '.uagb-infobox__content-wrap .uagb-infobox-cta-link > svg' ] = {
-			'margin-left': generateCSSUnit( ctaIconSpaceFallback, ctaIconSpaceType ),
+			[ rightSideMargin ]: ctaIconSpacing,
 		};
 		tabletSelectors[ '.uagb-infobox__content-wrap .uagb-infobox-cta-link > svg' ] = {
-			'margin-left': generateCSSUnit( ctaIconSpaceFallbackTablet, ctaIconSpaceType ),
+			[ rightSideMargin ]: ctaIconSpacingTablet,
 		};
 		mobileSelectors[ '.uagb-infobox__content-wrap .uagb-infobox-cta-link > svg' ] = {
-			'margin-left': generateCSSUnit( ctaIconSpaceFallbackMobile, ctaIconSpaceType ),
+			[ rightSideMargin ] : ctaIconSpacingMobile,
 		};
+
 	} else {
+
+		const leftSideMargin = uagb_blocks_info.is_rtl === '1' ? 'margin-left' : 'margin-right';
+
 		selectors[ '.uagb-infobox__content-wrap .uagb-infobox-cta-link > svg' ] = {
-			'margin-right': generateCSSUnit( ctaIconSpaceFallback, ctaIconSpaceType ),
+			[ leftSideMargin ]: ctaIconSpacing,
 		};
 		tabletSelectors[ '.uagb-infobox__content-wrap .uagb-infobox-cta-link > svg' ] = {
-			'margin-right': generateCSSUnit( ctaIconSpaceFallbackTablet, ctaIconSpaceType ),
+			[ leftSideMargin ]: ctaIconSpacingTablet,
 		};
 		mobileSelectors[ '.uagb-infobox__content-wrap .uagb-infobox-cta-link > svg' ] = {
-			'margin-right': generateCSSUnit( ctaIconSpaceFallbackMobile, ctaIconSpaceType ),
+			[ leftSideMargin ]: ctaIconSpacingMobile,
 		};
 	}
 
@@ -848,7 +869,7 @@ function styling( attributes, clientId, name ) {
 		selectors[' .uagb-ifb-button-wrapper .uagb-infobox-cta-link:hover svg'] = {
 			'fill': ctaLinkHoverColor,
 		};
-	
+
 		tabletSelectors['.uagb-infobox__content-wrap .uagb-ifb-cta .uagb-ifb-button-wrapper.wp-block-button a.uagb-infobox-cta-link.wp-block-button__link'] = {
 			'padding-top': generateCSSUnit( paddingBtnTopTablet, tabletPaddingBtnUnit ),
 			'padding-bottom': generateCSSUnit( paddingBtnBottomTablet, tabletPaddingBtnUnit ),
@@ -856,11 +877,11 @@ function styling( attributes, clientId, name ) {
 			'padding-right': generateCSSUnit( paddingBtnRightTablet, tabletPaddingBtnUnit ),
 		};
 		tabletSelectors[' .uagb-infobox-cta-link'] = {
-			'font-size': generateCSSUnit( ctaFontSizeTablet, ctaFontSizeType ),
+			'font-size': generateCSSUnit( ctaFontSizeTablet, ctaFontSizeTypeTablet ),
 			'letter-spacing': generateCSSUnit( ctaLetterSpacingTablet, ctaLetterSpacingType ),
 			'line-height': generateCSSUnit( ctaLineHeightTablet, ctaLineHeightType ),
 		};
-		
+
 		mobileSelectors[ '.uagb-infobox__content-wrap .uagb-ifb-cta .uagb-ifb-button-wrapper.wp-block-button a.uagb-infobox-cta-link.wp-block-button__link'] = {
 			'padding-top': generateCSSUnit( paddingBtnTopMobile, mobilePaddingBtnUnit ),
 			'padding-bottom': generateCSSUnit( paddingBtnBottomMobile, mobilePaddingBtnUnit ),
@@ -868,22 +889,36 @@ function styling( attributes, clientId, name ) {
 			'padding-right': generateCSSUnit( paddingBtnRightMobile, mobilePaddingBtnUnit ),
 		};
 		mobileSelectors[' .uagb-infobox-cta-link'] = {
-			'font-size': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeType ),
+			'font-size': generateCSSUnit( ctaFontSizeMobile, ctaFontSizeTypeMobile ),
 			'letter-spacing': generateCSSUnit( ctaLetterSpacingMobile, ctaLetterSpacingType ),
 			'line-height': generateCSSUnit( ctaLineHeightMobile, ctaLineHeightType ),
 		};
-		
+
 		selectors[ ' .uagb-infobox-cta-link.wp-block-button__link' ] = ctaBorderCSS;
 		mobileSelectors[ ' .uagb-infobox-cta-link.wp-block-button__link' ] = ctaBorderCSSMobile;
 		tabletSelectors[ ' .uagb-infobox-cta-link.wp-block-button__link' ] = ctaBorderCSSTablet;
 	}
 
-	const id = `.editor-styles-wrapper #block-${ clientId } .uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const id = `.editor-styles-wrapper #block-${ clientId } .uagb-block-${ block_id }`;
 	let stylingCss = generateCSS( selectors, id );
 
-	stylingCss += generateCSS( tabletSelectors, `${ id }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		stylingCss += generateCSS(
+			tabletSelectors,
+			`${ id }`,
+			true,
+			'tablet'
+		);
 
-	stylingCss += generateCSS( mobileSelectors, `${ id }`, true, 'mobile' );
+		if( 'mobile' === previewType ){
+			stylingCss += generateCSS(
+				mobileSelectors,
+				`${ id }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return stylingCss;
 }
 

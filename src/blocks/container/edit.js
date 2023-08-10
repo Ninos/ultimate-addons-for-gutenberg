@@ -20,6 +20,7 @@ import ReactHtmlParser from 'react-html-parser';
 import DynamicCSSLoader from '@Components/dynamic-css-loader';
 import { compose } from '@wordpress/compose';
 import AddStaticStyles from '@Controls/AddStaticStyles';
+import addInitialAttr from '@Controls/addInitialAttr';
 import { containerWrapper } from './containerWrapper';
 
 const UAGBContainer = ( props ) => {
@@ -57,10 +58,10 @@ const UAGBContainer = ( props ) => {
 
 		return {
 			innerBlocks: getBlocks( clientId ),
-			blockType: getBlockType( props.name ),
+			blockType: getBlockType( name ),
 			defaultVariation:
-				typeof getDefaultBlockVariation === 'undefined' ? null : getDefaultBlockVariation( props.name ),
-			variations: typeof getBlockVariations === 'undefined' ? null : getBlockVariations( props.name ),
+				typeof getDefaultBlockVariation === 'undefined' ? null : getDefaultBlockVariation( name ),
+			variations: typeof getBlockVariations === 'undefined' ? null : getBlockVariations( name ),
 			isParentOfSelectedBlock: select( 'core/block-editor' ).hasSelectedInnerBlock( clientId, true ),
 		};
 	} );
@@ -116,23 +117,19 @@ const UAGBContainer = ( props ) => {
 				// For Container Root.
 				parentBlocksNames.push( parentName );
 			}
+		} 
 
-			if ( ! parentBlocksNames.includes( 'uagb/container' ) ) {
-				setAttributes( { isBlockRootParent: true } );
-			} else {
-				setAttributes( { isBlockRootParent: false } );
-			}
-		} else {
-			setAttributes( { isBlockRootParent: true } );
-		}
-		
-		setAttributes( {
+		const attributesToUpdate = {
 			hasSliderParent: blockParents.hasSliderParent,
-			hasPopupParent: blockParents.hasPopupParent
-		} );
+			hasPopupParent: blockParents.hasPopupParent,
+		};
 
-		// Assigning block_id in the attribute.
-		setAttributes( { block_id: clientId.substr( 0, 8 ) } );
+		// Conditionally set the isBlockRootParent attribute
+		if ( !parentBlocks || parentBlocks.length === 0 || !parentBlocks.some( parent => parent.name === 'uagb/container' ) ) {
+			attributesToUpdate.isBlockRootParent = true;
+		}
+
+		setAttributes( attributesToUpdate );
 
 		const iframeEl = document.querySelector( `iframe[name='editor-canvas']` );
 		let element;
@@ -194,7 +191,9 @@ const UAGBContainer = ( props ) => {
 	}, [] );
 
 	useEffect( () => {
-		setAttributes( { context } );
+		if ( !attributes?.context ) {
+			setAttributes( { context } );
+		}
 	}, [ context ] )
 
 	const blockStyling = useMemo( () => styling( attributes, clientId, name, deviceType ), [ attributes, deviceType ] );
@@ -251,13 +250,14 @@ const UAGBContainer = ( props ) => {
 	return (
 		<>
 			<DynamicCSSLoader { ...{ blockStyling } } />
-			{ isSelected && <Settings parentProps={ props } /> }
-			<Render parentProps={ props } />
+			{ isSelected && <Settings { ...props } /> }
+			<Render { ...props } />
 		</>
 	);
 };
 
 export default compose(
 	containerWrapper,
+	addInitialAttr,
 	AddStaticStyles,
 )( UAGBContainer );

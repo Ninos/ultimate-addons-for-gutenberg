@@ -9,10 +9,12 @@ import generateCSS from '@Controls/generateCSS';
 import generateCSSUnit from '@Controls/generateCSSUnit';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 
-function styling( attributes, clientId, name ) {
+function styling( attributes, clientId, name, deviceType ) {
 	const blockName = name.replace( 'uagb/', '' );
+	const previewType = deviceType.toLowerCase();
 
 	const {
+		block_id,
 		skinStyle,
 		align,
 		authorColor,
@@ -329,9 +331,12 @@ function styling( attributes, clientId, name ) {
 			'width': generateCSSUnit( tweetBtnFontSize, tweetBtnFontSizeType ),
 			'height': generateCSSUnit( tweetBtnFontSize, tweetBtnFontSizeType ),
 		};
+        
+
+		const iconMargin = uagb_blocks_info.is_rtl === '1' ? 'margin-left' : 'margin-right';  
 
 		selectors[ '.uagb-blockquote__tweet-icon_text a.uagb-blockquote__tweet-button svg' ] = {
-			'margin-right': generateCSSUnit( tweetIconSpacingFallback, tweetIconSpacingUnit ),
+			[ iconMargin ]: generateCSSUnit( tweetIconSpacingFallback, tweetIconSpacingUnit ),
 		};
 
 		// Hover CSS
@@ -502,13 +507,27 @@ function styling( attributes, clientId, name ) {
 		},
 	};
 
-	const baseSelector = `.editor-styles-wrapper .uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const baseSelector = `.editor-styles-wrapper .uagb-block-${ block_id }`;
 
 	let stylingCss = generateCSS( selectors, baseSelector );
 
-	stylingCss += generateCSS( tabletSelectors, `${ baseSelector }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		stylingCss += generateCSS(
+			tabletSelectors,
+			`${ baseSelector }`,
+			true,
+			'tablet'
+		);
 
-	stylingCss += generateCSS( mobileSelectors, `${ baseSelector }`, true, 'mobile' );
+		if( 'mobile' === previewType ){
+			stylingCss += generateCSS(
+				mobileSelectors,
+				`${ baseSelector }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return stylingCss;
 }
 

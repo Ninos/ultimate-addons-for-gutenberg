@@ -8,9 +8,9 @@ import generateBackgroundCSS from '@Controls/generateBackgroundCSS';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 import generateBorderCSS from '@Controls/generateBorderCSS';
 
-function styling( attributes, clientId, name ) {
+function styling( attributes, clientId, name, deviceType ) {
 	const blockName = name.replace( 'uagb/', '' );
-
+	const previewType = deviceType.toLowerCase();
 	let {
 		block_id,
 		widthDesktop,
@@ -227,22 +227,7 @@ function styling( attributes, clientId, name ) {
 		'.wp-block-uagb-container .block-editor-block-list__block': {
 			'color': textColor,
 		},
-		'.wp-block-uagb-container h1': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h2': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h3': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h4': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h5': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h6': {
+		'.wp-block-uagb-container *': {
 			'color': textColor,
 		},
 		'.wp-block-uagb-container .block-editor-block-list__block a': {
@@ -368,7 +353,7 @@ function styling( attributes, clientId, name ) {
 			'margin-left': 'auto',
 			'margin-right': 'auto',
 		};
-		
+
 		widthSelectorsTablet[`.block-editor-block-list__block.uagb-editor-preview-mode-tablet.wp-block-uagb-container.uagb-block-${ block_id } > .uagb-container-inner-blocks-wrap`] = {
 			'--inner-content-custom-width' : `min(${ containerFullWidth },${ innerContentCustomWidthTablet || innerContentCustomWidthDesktopFallback }${ innerContentCustomWidthTypeTablet })`,
 			'max-width' : 'var(--inner-content-custom-width)',
@@ -388,7 +373,7 @@ function styling( attributes, clientId, name ) {
 			'margin-left': 'auto',
 			'margin-right': 'auto',
 		};
-		
+
 	}
 
 	const tablet_selectors = {
@@ -596,13 +581,28 @@ function styling( attributes, clientId, name ) {
 
 	styling_css += generateCSS( widthSelectorsDesktop, '.editor-styles-wrapper ' );
 
-	styling_css += generateCSS( tablet_selectors, `${ base_selector }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		styling_css += generateCSS(
+			tablet_selectors,
+			`${ base_selector }`,
+			true,
+			'tablet'
+		);
 
-	styling_css += generateCSS( widthSelectorsTablet, '.editor-styles-wrapper ', true, 'tablet' );
+		styling_css += generateCSS( widthSelectorsTablet, '.editor-styles-wrapper ', true, 'tablet' );
 
-	styling_css += generateCSS( mobile_selectors, `${ base_selector }`, true, 'mobile' );
+		if( 'mobile' === previewType ){
+			styling_css += generateCSS(
+				mobile_selectors,
+				`${ base_selector }`,
+				true,
+				'mobile'
+			);
 
-	styling_css += generateCSS( widthSelectorsMobile, '.editor-styles-wrapper ', true, 'mobile' );
+			styling_css += generateCSS( widthSelectorsMobile, '.editor-styles-wrapper ', true, 'mobile' );
+
+		}
+	}
 
 	return styling_css;
 }

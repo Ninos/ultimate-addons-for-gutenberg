@@ -30,7 +30,6 @@ import boxShadowPresets, { boxShadowHoverPresets, buttonsPresets } from './prese
 import UAGPresets from '@Components/presets';
 
 const Settings = ( props ) => {
-	props = props.parentProps;
 
 	const { attributes, setAttributes, deviceType } = props;
 
@@ -61,6 +60,8 @@ const Settings = ( props ) => {
 		hColor,
 		hBackground,
 		sizeType,
+		sizeTypeMobile,
+		sizeTypeTablet,
 		sizeMobile,
 		sizeTablet,
 		lineHeight,
@@ -239,6 +240,44 @@ const Settings = ( props ) => {
 	const textSettings = () => {
 		return (
 			<UAGAdvancedPanelBody title={ __( 'Text', 'ultimate-addons-for-gutenberg' ) } initialOpen={ true }>
+				<UAGTabsControl
+					tabs={ [
+						{
+							name: 'normal',
+							title: __( 'Normal', 'ultimate-addons-for-gutenberg' ),
+						},
+						{
+							name: 'hover',
+							title: __( 'Hover', 'ultimate-addons-for-gutenberg' ),
+						},
+					] }
+					normal={
+						<>
+							<AdvancedPopColorControl
+								label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
+								colorValue={ color ? color : '' }
+								data={ {
+									value: color,
+									label: 'color',
+								} }
+								setAttributes={ setAttributes }
+							/>
+						</>
+					}
+					hover={
+						<>
+							<AdvancedPopColorControl
+								label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
+								colorValue={ hColor ? hColor : '' }
+								data={ {
+									value: hColor,
+									label: 'hColor',
+								} }
+								setAttributes={ setAttributes }
+							/>
+						</>
+					}
+				/>
 				<TypographyControl
 					label={ __( 'Typography', 'ultimate-addons-for-gutenberg' ) }
 					attributes={ attributes }
@@ -270,6 +309,14 @@ const Settings = ( props ) => {
 					fontSizeType={ {
 						value: sizeType,
 						label: 'sizeType',
+					} }
+					fontSizeTypeTablet={ {
+						value: sizeTypeTablet,
+						label: 'sizeTypeTablet',
+					} }
+					fontSizeTypeMobile={ {
+						value: sizeTypeMobile,
+						label: 'sizeTypeMobile',
 					} }
 					fontSize={ {
 						value: size,
@@ -315,45 +362,6 @@ const Settings = ( props ) => {
 						value: letterSpacingType,
 						label: 'letterSpacingType',
 					} }
-				/>
-				<UAGTabsControl
-					tabs={ [
-						{
-							name: 'normal',
-							title: __( 'Normal', 'ultimate-addons-for-gutenberg' ),
-						},
-						{
-							name: 'hover',
-							title: __( 'Hover', 'ultimate-addons-for-gutenberg' ),
-						},
-					] }
-					normal={
-						<>
-							<AdvancedPopColorControl
-								label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
-								colorValue={ color ? color : '' }
-								data={ {
-									value: color,
-									label: 'color',
-								} }
-								setAttributes={ setAttributes }
-							/>
-						</>
-					}
-					hover={
-						<>
-							<AdvancedPopColorControl
-								label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
-								colorValue={ hColor ? hColor : '' }
-								data={ {
-									value: hColor,
-									label: 'hColor',
-								} }
-								setAttributes={ setAttributes }
-							/>
-						</>
-					}
-					disableBottomSeparator={ true }
 				/>
 			</UAGAdvancedPanelBody>
 		);

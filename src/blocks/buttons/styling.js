@@ -6,10 +6,12 @@ import generateCSS from '@Controls/generateCSS';
 import generateCSSUnit from '@Controls/generateCSSUnit';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 
-function styling( attributes, clientId, name ) {
+function styling( attributes, clientId, name, deviceType ) {
 	const blockName = name.replace( 'uagb/', '' );
+	const previewType = deviceType.toLowerCase();
 
 	const {
+		block_id,
 		fontFamily,
 		fontWeight,
 		gap,
@@ -24,6 +26,8 @@ function styling( attributes, clientId, name ) {
 		alignTablet,
 		alignMobile,
 		fontSizeType,
+		fontSizeTypeTablet,
+		fontSizeTypeMobile,
 		fontSize,
 		fontSizeMobile,
 		fontSizeTablet,
@@ -217,7 +221,7 @@ function styling( attributes, clientId, name ) {
 	tabletSelectors[
 		'.uagb-buttons__outer-wrap .uagb-button__wrapper .uagb-buttons-repeater.wp-block-button__link'
 	] = {
-		'font-size': generateCSSUnit( fontSizeTablet, fontSizeType ),
+		'font-size': generateCSSUnit( fontSizeTablet, fontSizeTypeTablet ),
 		'line-height': generateCSSUnit( lineHeightTablet, lineHeightType ),
 		'margin-left': generateCSSUnit( leftMarginTablet, marginType ),
 		'margin-right': generateCSSUnit( rightMarginTablet, marginType ),
@@ -237,7 +241,7 @@ function styling( attributes, clientId, name ) {
 	mobileSelectors[
 		'.uagb-buttons__outer-wrap .uagb-button__wrapper .uagb-buttons-repeater.wp-block-button__link'
 	] = {
-		'font-size': generateCSSUnit( fontSizeMobile, fontSizeType ),
+		'font-size': generateCSSUnit( fontSizeMobile, fontSizeTypeMobile ),
 		'line-height': generateCSSUnit( lineHeightMobile, lineHeightType ),
 		'margin-left': generateCSSUnit( leftMarginMobile, marginType ),
 		'margin-right': generateCSSUnit( rightMarginMobile, marginType ),
@@ -255,14 +259,27 @@ function styling( attributes, clientId, name ) {
 		'padding-bottom': generateCSSUnit( bottomMobilePadding, mobilePaddingUnit ),
 	};
 
-	const base_selector = ` .uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const base_selector = ` .uagb-block-${ block_id }`;
 
 	let styling_css = generateCSS( selectors, base_selector );
 
-	styling_css += generateCSS( tabletSelectors, `${ base_selector }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		styling_css += generateCSS(
+			tabletSelectors,
+			`${ base_selector }`,
+			true,
+			'tablet'
+		);
 
-	styling_css += generateCSS( mobileSelectors, `${ base_selector }`, true, 'mobile' );
-
+		if( 'mobile' === previewType ){
+			styling_css += generateCSS(
+				mobileSelectors,
+				`${ base_selector }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return styling_css;
 }
 

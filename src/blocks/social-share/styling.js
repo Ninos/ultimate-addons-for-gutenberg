@@ -6,9 +6,9 @@ import generateCSS from '@Controls/generateCSS';
 import generateCSSUnit from '@Controls/generateCSSUnit';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 
-function styling( attributes, clientId, name ) {
+function styling( attributes, clientId, name, deviceType ) {
 	const blockName = name.replace( 'uagb/', '' );
-
+	const previewType = deviceType.toLowerCase();
 	const {
 		align,
 		alignTablet,
@@ -40,16 +40,16 @@ function styling( attributes, clientId, name ) {
 	const gapMobileTabletFallback = isNaN( gapMobile ) ? gapTabletFallback : gapMobile;
 
 	const selectors = {
-		' a.uagb-ss__link': {
+		' span.uagb-ss__link': {
 			'color': iconColor,
 		},
-		' a.uagb-ss__link svg': {
+		' span.uagb-ss__link svg': {
 			'fill': iconColor,
 		},
-		' .uagb-ss-repeater:hover a.uagb-ss__link': {
+		' .uagb-ss-repeater:hover span.uagb-ss__link': {
 			'color': iconHoverColor,
 		},
-		' .uagb-ss-repeater:hover a.uagb-ss__link svg': {
+		' .uagb-ss-repeater:hover span.uagb-ss__link svg': {
 			'fill': iconHoverColor,
 		},
 		' .uagb-ss__wrapper': {
@@ -395,10 +395,23 @@ function styling( attributes, clientId, name ) {
 
 	stylingCss = generateCSS( selectors, id );
 
-	stylingCss += generateCSS( tabletSelectors, `${ id }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		stylingCss += generateCSS(
+			tabletSelectors,
+			`${ id }`,
+			true,
+			'tablet'
+		);
 
-	stylingCss += generateCSS( mobileSelectors, `${ id }`, true, 'mobile' );
-
+		if( 'mobile' === previewType ){
+			stylingCss += generateCSS(
+				mobileSelectors,
+				`${ id }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return stylingCss;
 }
 

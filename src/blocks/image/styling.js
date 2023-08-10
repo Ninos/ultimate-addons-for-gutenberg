@@ -8,10 +8,13 @@ import generateCSSUnit from '@Controls/generateCSSUnit';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 import generateShadowCSS from '@Controls/generateShadowCSS';
 
-export default function styling( attributes, clientId, name ) {
-	const blockName = name.replace( 'uagb/', '' );
 
+export default function styling( attributes, name, deviceType ) {
+
+	const blockName = name.replace( 'uagb/', '' );
+	const previewType = deviceType.toLowerCase();
 	const {
+		block_id,
 		width,
 		widthTablet,
 		widthMobile,
@@ -48,6 +51,8 @@ export default function styling( attributes, clientId, name ) {
 		captionTransform,
 		captionDecoration,
 		captionFontSizeType,
+		captionFontSizeTypeMobile,
+		captionFontSizeTypeTablet,
 		captionFontSizeMobile,
 		captionFontSizeTablet,
 		captionLineHeight,
@@ -79,6 +84,8 @@ export default function styling( attributes, clientId, name ) {
 		headingTransform,
 		headingDecoration,
 		headingFontSizeType,
+		headingFontSizeTypeMobile,
+		headingFontSizeTypeTablet,
 		headingFontSizeMobile,
 		headingFontSizeTablet,
 		headingLineHeight,
@@ -210,7 +217,7 @@ export default function styling( attributes, clientId, name ) {
 		'position': imageBoxShadowPositionHover,
 		'altColor': imageBoxShadowColor,
 	} );
-	
+
 	function getBlockAlign( alignment ) {
 		switch ( alignment ) {
 			case 'center':
@@ -223,7 +230,7 @@ export default function styling( attributes, clientId, name ) {
 				return '';
 		}
 	}
-	
+
 	const blockAlign = getBlockAlign( align );
 	const blockAlignTablet = getBlockAlign( alignTablet );
 	const blockAlignMobile = getBlockAlign( alignMobile );
@@ -393,7 +400,7 @@ export default function styling( attributes, clientId, name ) {
 		}
 	}
 
-	const base_selector = `.editor-styles-wrapper .uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const base_selector = `.editor-styles-wrapper .uagb-block-${ block_id }`;
 
 	const tablet_selectors = {};
 	const mobile_selectors = {};
@@ -403,8 +410,8 @@ export default function styling( attributes, clientId, name ) {
 		'height': generateCSSUnit( heightTablet, 'px' ),
 	};
 
-	tablet_selectors[ '.wp-block-uagb-image--layout-default figure' ] = imageBorderCSSTablet;
-	tablet_selectors[ '.wp-block-uagb-image--layout-overlay figure' ] = imageBorderCSSTablet;
+	tablet_selectors[ '.wp-block-uagb-image--layout-default figure img' ] = imageBorderCSSTablet;
+	tablet_selectors[ '.wp-block-uagb-image--layout-overlay figure img' ] = imageBorderCSSTablet;
 
 	tablet_selectors[ '.wp-block-uagb-image' ] = {
 		'margin-top': generateCSSUnit( imageTopMarginTablet, imageMarginUnitTablet ),
@@ -418,7 +425,7 @@ export default function styling( attributes, clientId, name ) {
 		'align-items': blockAlignTablet,
 	};
 	tablet_selectors[ '.wp-block-uagb-image .wp-block-uagb-image__figure figcaption' ] = {
-		'font-size': generateCSSUnit( captionFontSizeTablet, captionFontSizeType ),
+		'font-size': generateCSSUnit( captionFontSizeTablet, captionFontSizeTypeTablet ),
 		'line-height': generateCSSUnit( captionLineHeightTablet, captionLineHeightType ),
 		'letter-spacing': generateCSSUnit( captionLetterSpacingTablet, captionLetterSpacingType ),
 		'margin-top': generateCSSUnit( captionTopMarginTablet, captionMarginUnitTablet ),
@@ -432,7 +439,7 @@ export default function styling( attributes, clientId, name ) {
 	] = overlayBorderCSSTablet;
 
 	tablet_selectors[ '.wp-block-uagb-image .wp-block-uagb-image--layout-overlay__inner .uagb-image-heading' ] = {
-		'font-size': generateCSSUnit( headingFontSizeTablet, headingFontSizeType ),
+		'font-size': generateCSSUnit( headingFontSizeTablet, headingFontSizeTypeTablet ),
 		'line-height': generateCSSUnit( headingLineHeightTablet, headingLineHeightType ),
 		'letter-spacing': generateCSSUnit( headingLetterSpacingTablet, headingLetterSpacingType ),
 		'margin-top': generateCSSUnit( headingTopMarginTablet, headingMarginUnitTablet ),
@@ -464,8 +471,8 @@ export default function styling( attributes, clientId, name ) {
 		'height': generateCSSUnit( heightMobile, 'px' ),
 	};
 
-	mobile_selectors[ '.wp-block-uagb-image--layout-default figure' ] = imageBorderCSSMobile;
-	mobile_selectors[ '.wp-block-uagb-image--layout-overlay figure' ] = imageBorderCSSMobile;
+	mobile_selectors[ '.wp-block-uagb-image--layout-default figure img' ] = imageBorderCSSMobile;
+	mobile_selectors[ '.wp-block-uagb-image--layout-overlay figure img' ] = imageBorderCSSMobile;
 
 	mobile_selectors[ '.wp-block-uagb-image' ] = {
 		'margin-top': generateCSSUnit( imageTopMarginMobile, imageMarginUnitMobile ),
@@ -479,7 +486,7 @@ export default function styling( attributes, clientId, name ) {
 		'align-items': blockAlignMobile,
 	};
 	mobile_selectors[ '.wp-block-uagb-image .wp-block-uagb-image__figure figcaption' ] = {
-		'font-size': generateCSSUnit( captionFontSizeMobile, captionFontSizeType ),
+		'font-size': generateCSSUnit( captionFontSizeMobile, captionFontSizeTypeMobile ),
 		'line-height': generateCSSUnit( captionLineHeightMobile, captionLineHeightType ),
 		'letter-spacing': generateCSSUnit( captionLetterSpacingMobile, captionLetterSpacingType ),
 		'margin-top': generateCSSUnit( captionTopMarginMobile, captionMarginUnitMobile ),
@@ -493,7 +500,7 @@ export default function styling( attributes, clientId, name ) {
 	] = overlayBorderCSSMobile;
 
 	mobile_selectors[ '.wp-block-uagb-image .wp-block-uagb-image--layout-overlay__inner .uagb-image-heading' ] = {
-		'font-size': generateCSSUnit( headingFontSizeMobile, headingFontSizeType ),
+		'font-size': generateCSSUnit( headingFontSizeMobile, headingFontSizeTypeMobile ),
 		'line-height': generateCSSUnit( headingLineHeightMobile, headingLineHeightType ),
 		'letter-spacing': generateCSSUnit( headingLetterSpacingMobile, headingLetterSpacingType ),
 		'margin-top': generateCSSUnit( headingTopMarginMobile, headingMarginUnitMobile ),
@@ -521,9 +528,22 @@ export default function styling( attributes, clientId, name ) {
 
 	let styling_css = generateCSS( selectors, base_selector );
 
-	styling_css += generateCSS( tablet_selectors, `${ base_selector }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		styling_css += generateCSS(
+			tablet_selectors,
+			`${ base_selector }`,
+			true,
+			'tablet'
+		);
 
-	styling_css += generateCSS( mobile_selectors, `${ base_selector }`, true, 'mobile' );
-
+		if( 'mobile' === previewType ){
+			styling_css += generateCSS(
+				mobile_selectors,
+				`${ base_selector }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return styling_css;
 }
