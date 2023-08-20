@@ -215,7 +215,7 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 						$template_post_content = $template->content . ( ! empty( $post_content ) ? $post_content : '' );
 						$template_content      = parse_blocks( $template_post_content );
 						if ( get_template() === $template->theme && ! empty( $template_content ) && is_array( $template_content ) ) {
-							$current_block_attributes = $this->recursive_inner_forms( $template_content, $block_id );
+							$current_block_attributes = $this->recursive_inner_forms( $template_content, $block_id ) ?: $current_block_attributes;
 						}
 					}
 				}
