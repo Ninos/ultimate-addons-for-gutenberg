@@ -238,21 +238,21 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 			}
 
 			if ( defined( 'ASTRA_ADVANCED_HOOKS_POST_TYPE' ) ) {
-				
+
 				$option = array(
 					'location'  => 'ast-advanced-hook-location',
 					'exclusion' => 'ast-advanced-hook-exclusion',
 					'users'     => 'ast-advanced-hook-users',
 				);
-				
+
 				$result = Astra_Target_Rules_Fields::get_instance()->get_posts_by_conditions( ASTRA_ADVANCED_HOOKS_POST_TYPE, $option );
 
 				if ( ! empty( $result ) && is_array( $result ) ) {
 					$post_ids = array_keys( $result );
-					
-					foreach ( $post_ids as $post_id ) {
 
-						$custom_post = get_post( $post_id );
+					foreach ( $post_ids as $value ) {
+
+						$custom_post = get_post( $value );
 
 						if ( ! $custom_post instanceof WP_Post ) {
 							continue;
@@ -266,7 +266,7 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 								$current_block_attributes = $this->recursive_inner_forms( $blocks, $block_id );
 							}
 						}
-					}               
+					}
 				}
 			}
 
