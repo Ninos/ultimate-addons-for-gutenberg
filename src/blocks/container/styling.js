@@ -5,12 +5,13 @@
 import generateCSS from '@Controls/generateCSS';
 import generateCSSUnit from '@Controls/generateCSSUnit';
 import generateBackgroundCSS from '@Controls/generateBackgroundCSS';
+import backgroundCss from './backgroundCss';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 import generateBorderCSS from '@Controls/generateBorderCSS';
 
-function styling( attributes, clientId, name ) {
+function styling( attributes, clientId, name, deviceType ) {
 	const blockName = name.replace( 'uagb/', '' );
-
+	const previewType = deviceType.toLowerCase();
 	let {
 		block_id,
 		widthDesktop,
@@ -118,7 +119,7 @@ function styling( attributes, clientId, name ) {
 		backgroundCustomSizeType,
 		backgroundImageColor,
 		overlayType,
-		backgroundVideoOpacity,
+		overlayOpacity,
 		backgroundVideoColor,
 		innerContentCustomWidthType,
 		backgroundVideo,
@@ -145,7 +146,24 @@ function styling( attributes, clientId, name ) {
 		gradientType,
 		gradientAngle,
 		selectGradient,
+
+		// Extracted Border Width Attributes.
+		containerBorderTopWidth,
+		containerBorderRightWidth,
+		containerBorderBottomWidth,
+		containerBorderLeftWidth,
+		containerBorderTopWidthTablet,
+		containerBorderRightWidthTablet,
+		containerBorderBottomWidthTablet,
+		containerBorderLeftWidthTablet,
+		containerBorderTopWidthMobile,
+		containerBorderRightWidthMobile,
+		containerBorderBottomWidthMobile,
+		containerBorderLeftWidthMobile,
 	} = attributes;
+
+	// Background Image CSS is now added here as well so that we can generate CSS for the psuedo-element.
+	const getContainerBGStyle = backgroundCss( attributes, deviceType, clientId, { 'hasPseudo': true, 'forStyleSheet': true } );
 
 	const innerContentCustomWidthDesktopFallback = getFallbackNumber(
 		innerContentCustomWidthDesktop,
@@ -159,6 +177,11 @@ function styling( attributes, clientId, name ) {
 	const borderCSS = generateBorderCSS( attributes, 'container' );
 	const borderCSSTablet = generateBorderCSS( attributes, 'container', 'tablet' );
 	const borderCSSMobile = generateBorderCSS( attributes, 'container', 'mobile' );
+
+	// If there's no border-color, set it to inherit.
+	if ( ! borderCSS['border-color'] ) {
+		borderCSS['border-color'] = 'inherit';
+	}
 
 	topPaddingTablet = 'undefined' !== typeof topPaddingTablet ? topPaddingTablet : topPaddingDesktop;
 	topPaddingMobile = 'undefined' !== typeof topPaddingMobile ? topPaddingMobile : topPaddingTablet;
@@ -191,10 +214,10 @@ function styling( attributes, clientId, name ) {
 	const containerFullWidth = '100vw';
 
 	const backgroundVideoOpacityValue =
-		backgroundVideoOpacity &&
+		'number' === typeof overlayOpacity &&
 		'none' !== overlayType &&
 		( ( 'color' === overlayType && backgroundVideoColor ) || ( 'gradient' === overlayType && gradientValue ) )
-			? 1 - backgroundVideoOpacity
+			? 1 - overlayOpacity
 			: 1;
 
 	const videoBackgroundAttributes = {
@@ -227,22 +250,7 @@ function styling( attributes, clientId, name ) {
 		'.wp-block-uagb-container .block-editor-block-list__block': {
 			'color': textColor,
 		},
-		'.wp-block-uagb-container h1': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h2': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h3': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h4': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h5': {
-			'color': textColor,
-		},
-		'.wp-block-uagb-container h6': {
+		'.wp-block-uagb-container *': {
 			'color': textColor,
 		},
 		'.wp-block-uagb-container .block-editor-block-list__block a': {
@@ -368,7 +376,7 @@ function styling( attributes, clientId, name ) {
 			'margin-left': 'auto',
 			'margin-right': 'auto',
 		};
-		
+
 		widthSelectorsTablet[`.block-editor-block-list__block.uagb-editor-preview-mode-tablet.wp-block-uagb-container.uagb-block-${ block_id } > .uagb-container-inner-blocks-wrap`] = {
 			'--inner-content-custom-width' : `min(${ containerFullWidth },${ innerContentCustomWidthTablet || innerContentCustomWidthDesktopFallback }${ innerContentCustomWidthTypeTablet })`,
 			'max-width' : 'var(--inner-content-custom-width)',
@@ -388,7 +396,7 @@ function styling( attributes, clientId, name ) {
 			'margin-left': 'auto',
 			'margin-right': 'auto',
 		};
-		
+
 	}
 
 	const tablet_selectors = {
@@ -590,19 +598,84 @@ function styling( attributes, clientId, name ) {
 		);
 	}
 
+	// Add the Overlay CSS if needed.
+	if ( overlayType && 'none' !== overlayType && Object.keys( getContainerBGStyle ).length ) {
+		const desktopBorderWidth = {
+			'top': containerBorderTopWidth || 0,
+			'right': containerBorderRightWidth || 0,
+			'bottom': containerBorderBottomWidth || 0,
+			'left': containerBorderLeftWidth || 0,
+		};
+		const tabletBorderWidth = {
+			'top': containerBorderTopWidthTablet || desktopBorderWidth.top,
+			'right': containerBorderRightWidthTablet || desktopBorderWidth.right,
+			'bottom': containerBorderBottomWidthTablet || desktopBorderWidth.bottom,
+			'left': containerBorderLeftWidthTablet || desktopBorderWidth.left,
+		};
+		const mobileBorderWidth = {
+			'top': containerBorderTopWidthMobile || tabletBorderWidth.top,
+			'right': containerBorderRightWidthMobile || tabletBorderWidth.right,
+			'bottom': containerBorderBottomWidthMobile || tabletBorderWidth.bottom,
+			'left': containerBorderLeftWidthMobile || tabletBorderWidth.left,
+		}
+		selectors[ '.wp-block-uagb-container::before' ] = {
+			'content': '""',
+			'top': `-${ generateCSSUnit( desktopBorderWidth.top, 'px' ) }`,
+			'left': `-${ generateCSSUnit( desktopBorderWidth.left, 'px' ) }`,
+			'width': `calc(100% + ${ generateCSSUnit( desktopBorderWidth.left, 'px' ) } + ${ generateCSSUnit( desktopBorderWidth.right, 'px' ) })`,
+			'height': `calc(100% + ${ generateCSSUnit( desktopBorderWidth.top, 'px' ) } + ${ generateCSSUnit( desktopBorderWidth.bottom, 'px' ) })`,
+			...borderCSS,
+			...getContainerBGStyle,
+		};
+		selectors[ '.wp-block-uagb-container:hover::before' ] = {
+			'border-color': containerBorderHColor,
+		};
+		tablet_selectors[ '.wp-block-uagb-container::before' ] = {
+			'top': `-${ generateCSSUnit( tabletBorderWidth.top, 'px' ) }`,
+			'left': `-${ generateCSSUnit( tabletBorderWidth.left, 'px' ) }`,
+			// In the Editor Responsive, 100% seems to take the required witdh and height including offset...
+			'width': '100%',
+			'height': '100%', 
+			...borderCSSTablet,
+		};
+		mobile_selectors[ '.wp-block-uagb-container::before' ] = {
+			'top': `-${ generateCSSUnit( mobileBorderWidth.top, 'px' ) }`,
+			'left': `-${ generateCSSUnit( mobileBorderWidth.left, 'px' ) }`,
+			// In the Editor Responsive, 100% seems to take the required witdh and height including offset...
+			'width': '100%',
+			'height': '100%',
+			...borderCSSMobile,
+		};
+	}
+
 	const base_selector = `.editor-styles-wrapper #block-${ clientId }`;
 
 	let styling_css = generateCSS( selectors, base_selector );
 
 	styling_css += generateCSS( widthSelectorsDesktop, '.editor-styles-wrapper ' );
 
-	styling_css += generateCSS( tablet_selectors, `${ base_selector }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		styling_css += generateCSS(
+			tablet_selectors,
+			`${ base_selector }`,
+			true,
+			'tablet'
+		);
 
-	styling_css += generateCSS( widthSelectorsTablet, '.editor-styles-wrapper ', true, 'tablet' );
+		styling_css += generateCSS( widthSelectorsTablet, '.editor-styles-wrapper ', true, 'tablet' );
 
-	styling_css += generateCSS( mobile_selectors, `${ base_selector }`, true, 'mobile' );
+		if( 'mobile' === previewType ){
+			styling_css += generateCSS(
+				mobile_selectors,
+				`${ base_selector }`,
+				true,
+				'mobile'
+			);
 
-	styling_css += generateCSS( widthSelectorsMobile, '.editor-styles-wrapper ', true, 'mobile' );
+			styling_css += generateCSS( widthSelectorsMobile, '.editor-styles-wrapper ', true, 'mobile' );
+
+		}
+	}
 
 	return styling_css;
 }

@@ -6,7 +6,6 @@ import MultiButtonsControl from '@Components/multi-buttons-control';
 import InspectorTabs from '@Components/inspector-tabs/InspectorTabs.js';
 import TypographyControl from '@Components/typography';
 import SpacingControl from '@Components/spacing-control';
-import { useDeviceType } from '@Controls/getPreviewType';
 import ResponsiveBorder from '@Components/responsive-border';
 import renderSVG from '@Controls/renderIcon';
 import renderCustomIcon from '@Controls/renderCustomIcon';
@@ -21,9 +20,10 @@ import { InspectorControls } from '@wordpress/block-editor';
 import Separator from '@Components/separator';
 import { getSettings as getDateSettings } from '@wordpress/date';
 import { memo } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 
 function Settings( props ) {
-	props = props.parentProps;
+
 	const isPro = uagb_blocks_info.spectra_pro_status;
 	const {
 		setAttributes,
@@ -51,6 +51,8 @@ function Settings( props ) {
 			digitColor,
 			digitDecoration,
 			digitFontSizeType,
+			digitFontSizeTypeMobile,
+			digitFontSizeTypeTablet,
 			digitFontSizeMobile,
 			digitFontSizeTablet,
 			digitLineHeight,
@@ -71,6 +73,8 @@ function Settings( props ) {
 			labelTransform,
 			labelDecoration,
 			labelFontSizeType,
+			labelFontSizeTypeMobile,
+			labelFontSizeTypeTablet,
 			labelFontSizeMobile,
 			labelFontSizeTablet,
 			labelLineHeight,
@@ -89,6 +93,8 @@ function Settings( props ) {
 			separatorFontSize,
 			separatorColor,
 			separatorFontSizeType,
+			separatorFontSizeTypeMobile,
+			separatorFontSizeTypeTablet,
 			separatorFontSizeMobile,
 			separatorFontSizeTablet,
 			separatorLineHeight,
@@ -200,9 +206,8 @@ function Settings( props ) {
 			boxShadowSpreadHover,
 			boxShadowPositionHover,
 		},
+		deviceType,
 	} = props;
-
-	const deviceType = useDeviceType();
 
 	// <------------------ OPTIONS/VALUES ------------------>
 	const bgTypeOptions = [
@@ -274,7 +279,7 @@ function Settings( props ) {
 
 	// <------------------ GENERAL TAB ------------------>
 	const generalPanel = (
-		<UAGAdvancedPanelBody title={ __( 'General', 'ultimate-addons-for-gutenberg' ) } initialOpen={ false }>
+		<UAGAdvancedPanelBody title={ __( 'General', 'ultimate-addons-for-gutenberg' ) } initialOpen={ true }>
 			{ displayDatePanel() && (
 				<div className="uagb-countdown__datetime-picker">
 					<div>
@@ -328,7 +333,7 @@ function Settings( props ) {
 
 	// <------------------ PRESETS TAB ------------------>
 	const presetsPanel = (
-		<UAGAdvancedPanelBody title={ __( 'Presets', 'ultimate-addons-for-gutenberg' ) } initialOpen={ true }>
+		<UAGAdvancedPanelBody title={ __( 'Presets', 'ultimate-addons-for-gutenberg' ) } initialOpen={ false }>
 			<UAGPresets setAttributes={ setAttributes } presets={ countdownPresets } presetInputType="radioImage" />
 		</UAGAdvancedPanelBody>
 	);
@@ -767,6 +772,14 @@ function Settings( props ) {
 					value: digitFontSizeType,
 					label: 'digitFontSizeType',
 				} }
+				fontSizeTypeTablet={ {
+					value: digitFontSizeTypeTablet,
+					label: 'digitFontSizeTypeTablet',
+				} }
+				fontSizeTypeMobile={ {
+					value: digitFontSizeTypeMobile,
+					label: 'digitFontSizeTypeMobile',
+				} }
 				fontSize={ {
 					value: digitFontSize,
 					label: 'digitFontSize',
@@ -857,6 +870,14 @@ function Settings( props ) {
 					value: labelFontSizeType,
 					label: 'labelFontSizeType',
 				} }
+				fontSizeTypeTablet={ {
+					value: labelFontSizeTypeTablet,
+					label: 'labelFontSizeTypeTablet',
+				} }
+				fontSizeTypeMobile={ {
+					value: labelFontSizeTypeMobile,
+					label: 'labelFontSizeTypeMobile',
+				} }
 				fontSize={ {
 					value: labelFontSize,
 					label: 'labelFontSize',
@@ -940,6 +961,14 @@ function Settings( props ) {
 				fontSizeType={ {
 					value: separatorFontSizeType,
 					label: 'separatorFontSizeType',
+				} }
+				fontSizeTypeTablet={ {
+					value: separatorFontSizeTypeTablet,
+					label: 'separatorFontSizeTypeTablet',
+				} }
+				fontSizeTypeMobile={ {
+					value: separatorFontSizeTypeMobile,
+					label: 'separatorFontSizeTypeMobile',
 				} }
 				fontSize={ {
 					value: separatorFontSize,
@@ -1321,10 +1350,12 @@ function Settings( props ) {
 			<InspectorControls>
 				<InspectorTabs>
 					<InspectorTab { ...UAGTabs.general }>
-						{ presetsPanel }
 						{ generalPanel }
 						{ labelGeneralPanel }
 						{ separatorGeneralPanel }
+						{/* Expiry settings from Pro */}
+						{ applyFilters( 'spectra.countdown.expiry-settings' ) }
+						{ presetsPanel }
 					</InspectorTab>
 					<InspectorTab { ...UAGTabs.style }>
 						{ boxStylePanel }

@@ -1,9 +1,10 @@
 import { __ } from '@wordpress/i18n';
 import { useSelector, useDispatch } from 'react-redux';
 import { Switch } from '@headlessui/react'
-import apiFetch from '@wordpress/api-fetch';
 import UAGB_Block_Icons from '@Common/block-icons';
 import { useEffect } from 'react';
+
+import getApiData from '@Controls/getApiData';
 
 function classNames( ...classes ) {
     return classes.filter( Boolean ).join( ' ' )
@@ -18,18 +19,21 @@ const DynamicContentExtension = () => {
 
     useEffect( () => {
 
-        const formData = new window.FormData();
+        // Create an object with the security and enableDynamicContentExtension properties
+        const data = {
+            security: uag_react.enable_dynamic_content_nonce,
+            value: enableDynamicContentExtension,
+        };
 
-		formData.append( 'action', 'uag_enable_dynamic_content' );
-		formData.append( 'security', uag_react.enable_dynamic_content_nonce );
-		formData.append( 'value', enableDynamicContentExtension );
+        // Call the getApiData function with the specified parameters
+        const getApiFetchData = getApiData( {
+            url: uag_react.ajax_url,
+            action: 'uag_enable_dynamic_content',
+            data,
+        } );
 
-		apiFetch( {
-			url: uag_react.ajax_url,
-			method: 'POST',
-			body: formData,
-		} ).then( () => {
-		} );
+        // Wait for the API call to complete, but perform no actions after it finishes
+        getApiFetchData.then( () => {} );
 
     }, [enableDynamicContentExtension] );
 
@@ -72,15 +76,9 @@ const DynamicContentExtension = () => {
                         </div>
                     ) }
                 </p>
-				{/* This will be replaced by the commented code once Spectra Pro is released. */}
-				<span className="text-slate-400 text-sm truncate pointer-events-none">
-					{ __( 'Coming Soon', 'ultimate-addons-for-gutenberg' ) }
-				</span>
-				{/*
-                <a className="focus-visible:text-slate-500 active:text-slate-500 hover:text-slate-500 focus:text-slate-400 text-slate-400 text-sm truncate" href='https://wpspectra.com/docs/dynamic-content/' target="_blank"rel="noreferrer">
-					{ __( 'Documentation', 'ultimate-addons-for-gutenberg' ) }
+				<a className="focus-visible:text-slate-500 active:text-slate-500 hover:text-slate-500 focus:text-slate-400 text-slate-400 text-sm truncate" href='https://wpspectra.com/docs/how-to-use-dynamic-content/' target="_blank"rel="noreferrer">
+					{ __( 'Documentations', 'ultimate-addons-for-gutenberg' ) }
 				</a>
-				*/}
             </div>
             { uag_react.spectra_pro_status ? (
                 <Switch

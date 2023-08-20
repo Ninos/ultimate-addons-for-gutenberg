@@ -15,7 +15,7 @@ const attributes = {
 	},
 	prefixTitle: {
 		source: 'html',
-		selector: 'span.uagb-ifb-title-prefix',
+		selector: '.uagb-ifb-title-prefix',
 		default: __( 'Prefix', 'ultimate-addons-for-gutenberg' ),
 	},
 	classMigrate: {
@@ -149,6 +149,20 @@ const attributes = {
 			styleType: 'prefix-font-size-type',
 		},
 	},
+	prefixFontSizeTypeTablet: {
+		type: 'string',
+		default: 'px',
+		UAGCopyPaste: {
+			styleType: 'prefix-font-size-type-tablet',
+		},
+	},
+	prefixFontSizeTypeMobile: {
+		type: 'string',
+		default: 'px',
+		UAGCopyPaste: {
+			styleType: 'prefix-font-size-type-mobile',
+		},
+	},
 	prefixFontSizeTablet: {
 		type: 'number',
 		UAGCopyPaste: {
@@ -224,6 +238,10 @@ const attributes = {
 			styleType: 'prefix-load-google-font',
 		},
 	},
+	prefixHeadingTag:{
+		type: 'string',
+		default: 'span',
+	},
 	headingTag: {
 		type: 'string',
 		default: 'h3',
@@ -239,6 +257,20 @@ const attributes = {
 		default: 'px',
 		UAGCopyPaste: {
 			styleType: 'main-title-font-size-type',
+		},
+	},
+	headFontSizeTypeTablet: {
+		type: 'string',
+		default: 'px',
+		UAGCopyPaste: {
+			styleType: 'main-title-font-size-type-tablet',
+		},
+	},
+	headFontSizeTypeMobile: {
+		type: 'string',
+		default: 'px',
+		UAGCopyPaste: {
+			styleType: 'main-title-font-size-type-mobile',
 		},
 	},
 	headFontSizeTablet: {
@@ -364,6 +396,20 @@ const attributes = {
 		default: 'px',
 		UAGCopyPaste: {
 			styleType: 'desc-font-size-type',
+		},
+	},
+	subHeadFontSizeTypeTablet: {
+		type: 'string',
+		default: 'px',
+		UAGCopyPaste: {
+			styleType: 'desc-font-size-type-tablet',
+		},
+	},
+	subHeadFontSizeTypeMobile: {
+		type: 'string',
+		default: 'px',
+		UAGCopyPaste: {
+			styleType: 'desc-font-size-type-mobile',
 		},
 	},
 	subHeadFontSizeTablet: {
@@ -655,6 +701,20 @@ const attributes = {
 		default: 'px',
 		UAGCopyPaste: {
 			styleType: 'btn-font-size-type',
+		},
+	},
+	ctaFontSizeTypeTablet: {
+		type: 'string',
+		default: 'px',
+		UAGCopyPaste: {
+			styleType: 'btn-font-size-type-tablet',
+		},
+	},
+	ctaFontSizeTypeMobile: {
+		type: 'string',
+		default: 'px',
+		UAGCopyPaste: {
+			styleType: 'btn-font-size-type-mobile',
 		},
 	},
 	ctaFontSizeMobile: {

@@ -8,10 +8,11 @@ import getAttributeFallback, { getFallbackNumber } from '@Controls/getAttributeF
 import generateBorderCSS from '@Controls/generateBorderCSS';
 import generateBackgroundCSS from '@Controls/generateBackgroundCSS';
 
-function styling( attributes, clientId, name ) {
+function styling( attributes, clientId, name, deviceType ) {
 	const blockName = name.replace( 'uagb/', '' );
-
+	const previewType = deviceType.toLowerCase();
 	const {
+		block_id,
 		formPaddingTop,
 		formPaddingRight,
 		formPaddingBottom,
@@ -174,6 +175,7 @@ function styling( attributes, clientId, name ) {
 		gradientType,
 		gradientAngle,
 		selectGradient,
+		inheritFromTheme,
 	} = attributes;
 
 	let selectors = {};
@@ -423,6 +425,9 @@ function styling( attributes, clientId, name ) {
 			'border': '2px solid ' + fieldBorderHColor,
 			'background-color': `${ bgActiveColor } !important`,
 		},
+		' .uagb-forms-main-form .components-select-control__input:focus': {
+			'background-color': `${ bgActiveColor } !important`,
+		},
 		' .uagb-forms-main-form .uagb-forms-input:focus::placeholder': {
 			'color': `${ inputplaceholderActiveColor } !important`,
 		},
@@ -433,48 +438,6 @@ function styling( attributes, clientId, name ) {
 				paddingFieldBottom,
 				paddingFieldUnit
 			) })`,
-		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap': {
-			'text-align': buttonAlign,
-		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button': {
-			'color': submitColor,
-			'font-size': generateCSSUnit( submitTextFontSize, submitTextFontSizeType ),
-			'line-height': generateCSSUnit( submitTextLineHeight, submitTextLineHeightType ),
-			'font-family': submitTextFontFamily,
-			'font-style': submitTextFontStyle,
-			'text-transform': submitTextTransform,
-			'text-decoration': submitTextDecoration,
-			'font-weight': submitTextFontWeight,
-			...submitBorder,
-			'padding-top': generateCSSUnit( paddingBtnTop, paddingBtnUnit ),
-			'padding-bottom': generateCSSUnit( paddingBtnBottom, paddingBtnUnit ),
-			'padding-left': generateCSSUnit( paddingBtnLeft, paddingBtnUnit ),
-			'padding-right': generateCSSUnit( paddingBtnRight, paddingBtnUnit ),
-			'letter-spacing': generateCSSUnit( submitTextLetterSpacing, submitTextLetterSpacingType ),
-		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap.wp-block-button:not(.is-style-outline) .uagb-forms-main-submit-button.wp-block-button__link:not(.has-background)': {
-			'color': submitColor,
-			'font-size': generateCSSUnit( submitTextFontSize, submitTextFontSizeType ),
-			'line-height': generateCSSUnit( submitTextLineHeight, submitTextLineHeightType ),
-			'font-family': submitTextFontFamily,
-			'font-style': submitTextFontStyle,
-			'text-transform': submitTextTransform,
-			'text-decoration': submitTextDecoration,
-			'font-weight': submitTextFontWeight,
-			...submitBorder,
-			'padding-top': generateCSSUnit( paddingBtnTop, paddingBtnUnit ),
-			'padding-bottom': generateCSSUnit( paddingBtnBottom, paddingBtnUnit ),
-			'padding-left': generateCSSUnit( paddingBtnLeft, paddingBtnUnit ),
-			'padding-right': generateCSSUnit( paddingBtnRight, paddingBtnUnit ),
-		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap.wp-block-button:not(.is-style-outline) .uagb-forms-main-submit-button.wp-block-button__link:not(.has-background):hover': {
-			'color': submitColorHover,
-			'border-color': btnBorderHColor,
-		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button:hover': {
-			'color': submitColorHover,
-			'border-color': btnBorderHColor,
 		},
 		' .uagb-switch': {
 			// 20 is the min size of the toggle.
@@ -576,10 +539,23 @@ function styling( attributes, clientId, name ) {
 		' .uagb-forms-field-set:hover .uagb-forms-input::placeholder': {
 			'color': inputplaceholderHoverColor,
 		},
-		' .uagb-forms-field-set:hover .uagb-forms-input select': {
-			'color': inputplaceholderHoverColor,
+		' .uagb-forms-field-set .uagb-forms-input select': {
+			'color': inputColor,
+		},
+		' .uagb-forms-phone-flex:hover .components-base-control__field .components-select-control__input': {
+			'background-color': bgHoverColor,
 		},
 	};
+
+	if ( buttonAlign !== 'full' ) {
+		selectors[ ' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap' ] = {
+			'text-align': buttonAlign,
+		};
+	} else {
+		selectors[ ' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap' ] = {
+			'display': 'grid',
+		};
+	}
 
 	tabletSelectors = {
 		'.uagb-forms__outer-wrap': {
@@ -640,16 +616,6 @@ function styling( attributes, clientId, name ) {
 				'px'
 			) })`,
 		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button': {
-			'padding-top': generateCSSUnit( paddingBtnTopTablet, tabletPaddingBtnUnit ),
-			'padding-bottom': generateCSSUnit( paddingBtnBottomTablet, tabletPaddingBtnUnit ),
-			'padding-left': generateCSSUnit( paddingBtnLeftTablet, tabletPaddingBtnUnit ),
-			'padding-right': generateCSSUnit( paddingBtnRightTablet, tabletPaddingBtnUnit ),
-			'font-size': generateCSSUnit( submitTextFontSizeTablet, submitTextFontSizeType ),
-			'line-height': generateCSSUnit( submitTextLineHeightTablet, submitTextLineHeightType ),
-			'letter-spacing': generateCSSUnit( submitTextLetterSpacingTablet, submitTextLetterSpacingType ),
-			...submitBorderTablet,
-		},
 		' .uagb-forms-main-form .uagb-forms-input-label': {
 			'font-size': generateCSSUnit( labelFontSizeTablet, labelFontSizeType ),
 			'line-height': generateCSSUnit( labelLineHeightTablet, labelLineHeightType ),
@@ -661,11 +627,17 @@ function styling( attributes, clientId, name ) {
 			'line-height': generateCSSUnit( inputLineHeightTablet, inputLineHeightType ),
 			'letter-spacing': generateCSSUnit( inputLetterSpacingTablet, inputLetterSpacingType ),
 		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap': {
-			'text-align': buttonAlignTablet,
-		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap.wp-block-button:not(.is-style-outline) .uagb-forms-main-submit-button.wp-block-button__link:not(.has-background)': submitBorderTablet,
 	};
+
+	if ( buttonAlignTablet !== 'full' ) {
+		tabletSelectors[ ' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap' ] = {
+			'text-align': buttonAlignTablet,
+		};
+	} else {
+		tabletSelectors[ ' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap' ] = {
+			'display': 'grid',
+		};
+	}
 
 	mobileSelectors = {
 		'.uagb-forms__outer-wrap': {
@@ -726,17 +698,6 @@ function styling( attributes, clientId, name ) {
 				'px'
 			) })`,
 		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button': {
-			// eslint-disable-line no-dupe-keys
-			'padding-top': generateCSSUnit( paddingBtnTopMobile, mobilePaddingBtnUnit ),
-			'padding-bottom': generateCSSUnit( paddingBtnBottomMobile, mobilePaddingBtnUnit ),
-			'padding-left': generateCSSUnit( paddingBtnLeftMobile, mobilePaddingBtnUnit ),
-			'padding-right': generateCSSUnit( paddingBtnRightMobile, mobilePaddingBtnUnit ),
-			'font-size': generateCSSUnit( submitTextFontSizeMobile, submitTextFontSizeType ),
-			'line-height': generateCSSUnit( submitTextLineHeightMobile, submitTextLineHeightType ),
-			...submitBorderMobile,
-			'letter-spacing': generateCSSUnit( submitTextLetterSpacingMobile, submitTextLetterSpacingType ),
-		},
 		' .uagb-forms-main-form .uagb-forms-input-label': {
 			'font-size': generateCSSUnit( labelFontSizeMobile, labelFontSizeType ),
 			'line-height': generateCSSUnit( labelLineHeightMobile, labelLineHeightType ),
@@ -748,73 +709,15 @@ function styling( attributes, clientId, name ) {
 			'line-height': generateCSSUnit( inputLineHeightMobile, inputLineHeightType ),
 			'letter-spacing': generateCSSUnit( inputLetterSpacingMobile, inputLetterSpacingType ),
 		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap': {
-			'text-align': buttonAlignMobile,
-		},
-		' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap.wp-block-button:not(.is-style-outline) .uagb-forms-main-submit-button.wp-block-button__link:not(.has-background)': submitBorderMobile,
 	};
 
-	if ( 'color' === submitBgType ) {
-		selectors[
-			' .uagb-forms-main-form  .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button.wp-block-button__link'
-		] = {
-			'background-color': submitBgColor,
+	if ( buttonAlignMobile !== 'full' ) {
+		mobileSelectors[ ' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap' ] = {
+			'text-align': buttonAlignMobile,
 		};
-	} else if ( 'gradient' === submitBgType ) {
-		const backgroundAttributes = {
-			'backgroundType': 'gradient',
-			'gradientValue': gradientValue,
-			'gradientColor1': gradientColor1,
-			'gradientColor2': gradientColor2,
-			'gradientLocation1': gradientLocation1,
-			'gradientLocation2': gradientLocation2,
-			'gradientType': gradientType,
-			'gradientAngle': gradientAngle,
-			'selectGradient': selectGradient,
-		};
-
-		const btnBackground = generateBackgroundCSS( backgroundAttributes );
-
-		selectors[
-			' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button.wp-block-button__link'
-		] = btnBackground;
-	} else if ( 'transparent' === submitBgType ) {
-		selectors[
-			' .uagb-forms-main-form  .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button.wp-block-button__link'
-		] = {
-			'background': 'transparent',
-		};
-	}
-	//Hover
-	if ( 'color' === submitBgHoverType ) {
-		selectors[
-			' .uagb-forms-main-form  .uagb-forms-main-submit-button-wrap:hover .uagb-forms-main-submit-button.wp-block-button__link'
-		] = {
-			'background-color': submitBgColorHover,
-		};
-	} else if ( 'gradient' === submitBgHoverType ) {
-		const hoverbackgroundAttributes = {
-			'backgroundType': 'gradient',
-			'gradientValue': gradientHValue,
-			'gradientColor1': gradientHColor1,
-			'gradientColor2': gradientHColor2,
-			'gradientLocation1': gradientHLocation1,
-			'gradientLocation2': gradientHLocation2,
-			'gradientType': gradientHType,
-			'gradientAngle': gradientHAngle,
-			'selectGradient': selectHGradient,
-		};
-
-		const btnhBackground = generateBackgroundCSS( hoverbackgroundAttributes );
-
-		selectors[
-			' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap:hover .uagb-forms-main-submit-button.wp-block-button__link'
-		] = btnhBackground;
-	} else if ( 'transparent' === submitBgHoverType ) {
-		selectors[
-			' .uagb-forms-main-form  .uagb-forms-main-submit-button-wrap:hover .uagb-forms-main-submit-button.wp-block-button__link'
-		] = {
-			'background': 'transparent',
+	} else {
+		mobileSelectors[ ' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap' ] = {
+			'display': 'grid',
 		};
 	}
 
@@ -900,14 +803,14 @@ function styling( attributes, clientId, name ) {
 			'border-left-width': 0,
 			'box-shadow': 'unset',
 		};
-		tabletSelectors[ ' .uagb-forms-main-form  .uagb-forms-input' ] = {
+		tabletSelectors[ '.uagb-forms__outer-wrap .uagb-forms-main-form  .uagb-forms-input' ] = {
 			'padding-top': generateCSSUnit( paddingFieldTopTablet, paddingFieldUnitTablet ),
 			'padding-bottom': generateCSSUnit( paddingFieldBottomTablet, paddingFieldUnitTablet ),
 			'padding-left': generateCSSUnit( paddingFieldLeftTablet, paddingFieldUnitTablet ),
 			'padding-right': generateCSSUnit( paddingFieldRightTablet, paddingFieldUnitTablet ),
 			...inputBorderTablet,
 		};
-		mobileSelectors[ ' .uagb-forms-main-form  .uagb-forms-input' ] = {
+		mobileSelectors[ '.uagb-forms__outer-wrap .uagb-forms-main-form  .uagb-forms-input' ] = {
 			'padding-top': generateCSSUnit( paddingFieldTopMobile, paddingFieldUnitmobile ),
 			'padding-bottom': generateCSSUnit( paddingFieldBottomMobile, paddingFieldUnitmobile ),
 			'padding-left': generateCSSUnit( paddingFieldLeftMobile, paddingFieldUnitmobile ),
@@ -949,14 +852,174 @@ function styling( attributes, clientId, name ) {
 		};
 	}
 
+	if ( ! inheritFromTheme ) {
+		if ( 'color' === submitBgType ) {
+			selectors[
+				' .uagb-forms-main-form  .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button.wp-block-button__link'
+			] = {
+				'background-color': submitBgColor,
+			};
+		} else if ( 'gradient' === submitBgType ) {
+			const backgroundAttributes = {
+				'backgroundType': 'gradient',
+				'gradientValue': gradientValue,
+				'gradientColor1': gradientColor1,
+				'gradientColor2': gradientColor2,
+				'gradientLocation1': gradientLocation1,
+				'gradientLocation2': gradientLocation2,
+				'gradientType': gradientType,
+				'gradientAngle': gradientAngle,
+				'selectGradient': selectGradient,
+			};
+
+			const btnBackground = generateBackgroundCSS( backgroundAttributes );
+
+			selectors[
+				' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button.wp-block-button__link'
+			] = btnBackground;
+		} else if ( 'transparent' === submitBgType ) {
+			selectors[
+				' .uagb-forms-main-form  .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button.wp-block-button__link'
+			] = {
+				'background': 'transparent',
+			};
+		}
+		//Hover
+		if ( 'color' === submitBgHoverType ) {
+			selectors[
+				' .uagb-forms-main-form  .uagb-forms-main-submit-button-wrap:hover .uagb-forms-main-submit-button.wp-block-button__link'
+			] = {
+				'background-color': submitBgColorHover,
+			};
+		} else if ( 'gradient' === submitBgHoverType ) {
+			const hoverbackgroundAttributes = {
+				'backgroundType': 'gradient',
+				'gradientValue': gradientHValue,
+				'gradientColor1': gradientHColor1,
+				'gradientColor2': gradientHColor2,
+				'gradientLocation1': gradientHLocation1,
+				'gradientLocation2': gradientHLocation2,
+				'gradientType': gradientHType,
+				'gradientAngle': gradientHAngle,
+				'selectGradient': selectHGradient,
+			};
+
+			const btnhBackground = generateBackgroundCSS( hoverbackgroundAttributes );
+
+			selectors[
+				' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap:hover .uagb-forms-main-submit-button.wp-block-button__link'
+			] = btnhBackground;
+		} else if ( 'transparent' === submitBgHoverType ) {
+			selectors[
+				' .uagb-forms-main-form  .uagb-forms-main-submit-button-wrap:hover .uagb-forms-main-submit-button.wp-block-button__link'
+			] = {
+				'background': 'transparent',
+			};
+		}
+		selectors[ '.uagb-forms__small-btn .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button' ] = {
+			'padding': '5px 10px',
+		};
+		selectors[ '.uagb-forms__medium-btn .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button' ] = {
+			'padding': '12px 24px',
+		};
+		selectors[ '.uagb-forms__large-btn .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button' ] = {
+			'padding': '20px 30px',
+		};
+		selectors[
+			'.uagb-forms__extralarge-btn .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button'
+		] = {
+			'padding': '30px 65px',
+		};
+		selectors[ '.uagb-forms__full-btn .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button' ] = {
+			'width': '100%',
+			'padding': '10px 15px',
+		};
+		selectors[
+			' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap.wp-block-button:not(.is-style-outline) .uagb-forms-main-submit-button.wp-block-button__link:not(.has-background)'
+		] = {
+			'color': submitColor,
+			'font-size': generateCSSUnit( submitTextFontSize, submitTextFontSizeType ),
+			'line-height': generateCSSUnit( submitTextLineHeight, submitTextLineHeightType ),
+			'font-family': submitTextFontFamily,
+			'font-style': submitTextFontStyle,
+			'text-transform': submitTextTransform,
+			'text-decoration': submitTextDecoration,
+			'font-weight': submitTextFontWeight,
+			...submitBorder,
+			'padding-top': generateCSSUnit( paddingBtnTop, paddingBtnUnit ),
+			'padding-bottom': generateCSSUnit( paddingBtnBottom, paddingBtnUnit ),
+			'padding-left': generateCSSUnit( paddingBtnLeft, paddingBtnUnit ),
+			'padding-right': generateCSSUnit( paddingBtnRight, paddingBtnUnit ),
+		};
+		selectors[ ' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button' ] = {
+			'color': submitColor,
+			'font-size': generateCSSUnit( submitTextFontSize, submitTextFontSizeType ),
+			'line-height': generateCSSUnit( submitTextLineHeight, submitTextLineHeightType ),
+			'font-family': submitTextFontFamily,
+			'font-style': submitTextFontStyle,
+			'text-transform': submitTextTransform,
+			'text-decoration': submitTextDecoration,
+			'font-weight': submitTextFontWeight,
+			...submitBorder,
+			'padding-top': generateCSSUnit( paddingBtnTop, paddingBtnUnit ),
+			'padding-bottom': generateCSSUnit( paddingBtnBottom, paddingBtnUnit ),
+			'padding-left': generateCSSUnit( paddingBtnLeft, paddingBtnUnit ),
+			'padding-right': generateCSSUnit( paddingBtnRight, paddingBtnUnit ),
+			'letter-spacing': generateCSSUnit( submitTextLetterSpacing, submitTextLetterSpacingType ),
+		};
+		selectors[
+			' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap.wp-block-button:not(.is-style-outline) .uagb-forms-main-submit-button.wp-block-button__link:not(.has-background):hover'
+		] = {
+			'color': submitColorHover,
+			'border-color': btnBorderHColor,
+		};
+		selectors[ ' .uagb-forms-main-form .uagb-forms-main-submit-button:hover' ] = {
+			'color': submitColorHover,
+			'border-color': btnBorderHColor,
+		};
+		tabletSelectors[
+			' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap.wp-block-button:not(.is-style-outline) .uagb-forms-main-submit-button.wp-block-button__link:not(.has-background)'
+		] = submitBorderTablet;
+		tabletSelectors[
+			' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button'
+		] = {
+			'padding-top': generateCSSUnit( paddingBtnTopTablet, tabletPaddingBtnUnit ),
+			'padding-bottom': generateCSSUnit( paddingBtnBottomTablet, tabletPaddingBtnUnit ),
+			'padding-left': generateCSSUnit( paddingBtnLeftTablet, tabletPaddingBtnUnit ),
+			'padding-right': generateCSSUnit( paddingBtnRightTablet, tabletPaddingBtnUnit ),
+			'font-size': generateCSSUnit( submitTextFontSizeTablet, submitTextFontSizeType ),
+			'line-height': generateCSSUnit( submitTextLineHeightTablet, submitTextLineHeightType ),
+			'letter-spacing': generateCSSUnit( submitTextLetterSpacingTablet, submitTextLetterSpacingType ),
+			...submitBorderTablet,
+		};
+		mobileSelectors[
+			' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap.wp-block-button:not(.is-style-outline) .uagb-forms-main-submit-button.wp-block-button__link:not(.has-background)'
+		] = submitBorderMobile;
+		mobileSelectors[
+			' .uagb-forms-main-form .uagb-forms-main-submit-button-wrap .uagb-forms-main-submit-button'
+		] = {
+			'padding-top': generateCSSUnit( paddingBtnTopMobile, mobilePaddingBtnUnit ),
+			'padding-bottom': generateCSSUnit( paddingBtnBottomMobile, mobilePaddingBtnUnit ),
+			'padding-left': generateCSSUnit( paddingBtnLeftMobile, mobilePaddingBtnUnit ),
+			'padding-right': generateCSSUnit( paddingBtnRightMobile, mobilePaddingBtnUnit ),
+			'font-size': generateCSSUnit( submitTextFontSizeMobile, submitTextFontSizeType ),
+			'line-height': generateCSSUnit( submitTextLineHeightMobile, submitTextLineHeightType ),
+			...submitBorderMobile,
+			'letter-spacing': generateCSSUnit( submitTextLetterSpacingMobile, submitTextLetterSpacingType ),
+		};
+	}
+
 	let stylingCss = '';
-	const base_selector = `.editor-styles-wrapper .uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const base_selector = `.editor-styles-wrapper .uagb-block-${ block_id }`;
 	stylingCss = generateCSS( selectors, base_selector );
 
-	stylingCss += generateCSS( tabletSelectors, `${ base_selector }`, true, 'tablet' );
+	if ( 'tablet' === previewType || 'mobile' === previewType ) {
+		stylingCss += generateCSS( tabletSelectors, `${ base_selector }`, true, 'tablet' );
 
-	stylingCss += generateCSS( mobileSelectors, `${ base_selector }`, true, 'mobile' );
-
+		if ( 'mobile' === previewType ) {
+			stylingCss += generateCSS( mobileSelectors, `${ base_selector }`, true, 'mobile' );
+		}
+	}
 	return stylingCss;
 }
 

@@ -5,15 +5,11 @@
 import { useEffect } from '@wordpress/element';
 import Settings from './settings';
 import Render from './render';
+import { compose } from '@wordpress/compose';
+import AddInitialAttr from '@Controls/addInitialAttr';
 
 const ContentTimelineChildComponent = ( props ) => {
-	const { isSelected, setAttributes, deviceType } = props;
-
-	useEffect( () => {
-		// Replacement for componentDidMount.
-		//Store client id.
-		setAttributes( { block_id: props.clientId } );
-	}, [] );
+	const { isSelected, deviceType } = props;
 
 	useEffect( () => {
 		const loadContentTimelineEditor = new CustomEvent( 'UAGTimelineEditor', {
@@ -25,10 +21,12 @@ const ContentTimelineChildComponent = ( props ) => {
 
 	return (
 		<>
-			{ isSelected && <Settings parentProps={ props } /> }
-			<Render parentProps={ props } />
+			{ isSelected && <Settings { ...props } /> }
+			<Render { ...props } />
 		</>
 	);
 };
 
-export default ContentTimelineChildComponent;
+export default compose(
+	AddInitialAttr,
+)( ContentTimelineChildComponent );

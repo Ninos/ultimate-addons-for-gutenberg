@@ -1,13 +1,11 @@
 import UAGB_Block_Icons from '@Common/block-icons';
 import { Switch } from '@headlessui/react'
-import apiFetch from '@wordpress/api-fetch';
 import { useSelector, useDispatch } from 'react-redux';
 import { __ } from '@wordpress/i18n';
-
+import getApiData from '@Controls/getApiData';
 const classNames = ( ...classes ) => ( classes.filter( Boolean ).join( ' ' ) );
 
 const BlockCard = ( props ) => {
-
     const {
         admin_categories,
         link,
@@ -38,24 +36,22 @@ const BlockCard = ( props ) => {
 
         dispatch( {type:'UPDATE_BLOCK_STATUSES', payload: optionsClone} );
 
-        const formData = new window.FormData();
+        // Create an object with the security and value properties
+        const data = {
+            security: uag_react.blocks_activation_and_deactivation_nonce,
+            value: JSON.stringify( optionsClone ),
+        };
 
-        formData.append(
-            'action',
-            'uag_blocks_activation_and_deactivation'
-        );
-        formData.append(
-            'security',
-            uag_react.blocks_activation_and_deactivation_nonce
-        );
-        formData.append( 'value', JSON.stringify( optionsClone ) );
-
-        apiFetch( {
+        // Call the getApiData function with the specified parameters
+        const getApiFetchData = getApiData( {
             url: uag_react.ajax_url,
-            method: 'POST',
-            body: formData,
-        } ).then( () => {
-			dispatch( {type: 'UPDATE_SETTINGS_SAVED_NOTIFICATION', payload: 'Successfully saved!' } );
+            action: 'uag_blocks_activation_and_deactivation',
+            data,
+        } );
+
+        // Wait for the API call to complete, then update the state to show a notification that the settings have been saved
+        getApiFetchData.then( () => {
+            dispatch( { type: 'UPDATE_SETTINGS_SAVED_NOTIFICATION', payload: 'Successfully saved!' } );
         } );
     };
 
@@ -86,17 +82,9 @@ const BlockCard = ( props ) => {
                         </div>
                     ) }
                 </p>
-				{/* This condition is added until Spectra Pro is released. */}
-				{ admin_categories?.includes( 'pro' ) ? (
-					<span className="text-slate-400 text-sm truncate pointer-events-none">
-						{ __( 'Coming Soon', 'ultimate-addons-for-gutenberg' ) }
-					</span>
-				) : (
-					<a className="focus-visible:text-slate-500 active:text-slate-500 hover:text-slate-500 focus:text-slate-400 text-slate-400 text-sm truncate" href={ `https://wpspectra.com/blocks/${ link }` } target="_blank"rel="noreferrer">
-						{ __( 'Live Demo', 'ultimate-addons-for-gutenberg' ) }
-					</a>
-				) }
-                
+				<a className="focus-visible:text-slate-500 active:text-slate-500 hover:text-slate-500 focus:text-slate-400 text-slate-400 text-sm truncate" href={ `https://wpspectra.com/blocks/${ link }` } target="_blank"rel="noreferrer">
+					{ __( 'Live Demo', 'ultimate-addons-for-gutenberg' ) }
+				</a>                
             </div>
             { pro_filler ? (
                 <div className="inline-block align-text-bottom max-h-4 px-1.5 py-[3px] ml-1.5 text-[10px] leading-[10px] border border-slate-800 bg-slate-800 text-white rounded spectra-admin__block-label">

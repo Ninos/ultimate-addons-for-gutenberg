@@ -23,12 +23,12 @@ const Render = ( props ) => {
 			styles.unuse();
 		};
 	}, [] );
-	const { latestPosts } = props;
-	props = props.parentProps;
-	const blockName = props.name.replace( 'uagb/', '' );
-	const { attributes, className, setAttributes, deviceType } = props;
+	
+	const { latestPosts, attributes, className, setAttributes, deviceType, name } = props;
 
-	const { displayPostLink, postsToShow } = attributes;
+	const blockName = name.replace( 'uagb/', '' );
+
+	const { displayPostLink, postsToShow, block_id } = attributes;
 
 	const timelinAlignment =
 		'undefined' !== typeof attributes[ 'timelinAlignment' + deviceType ]
@@ -119,7 +119,7 @@ const Render = ( props ) => {
 				'uagb-timeline__outer-wrap',
 				'uagb-timeline__content-wrap',
 				`uagb-editor-preview-mode-${ deviceType.toLowerCase() }`,
-				`uagb-block-${ props.clientId.substr( 0, 8 ) }`,
+				`uagb-block-${ block_id }`,
 				ctaEnable,
 				...ContentTmClasses( props.attributes, deviceType )
 			) }

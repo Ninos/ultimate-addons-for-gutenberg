@@ -16,7 +16,6 @@ import UAGTextControl from '@Components/text-control';
 import { memo } from '@wordpress/element';
 
 const Settings = ( props ) => {
-	props = props.parentProps;
 
 	const { attributes, setAttributes, deviceType } = props;
 
@@ -236,8 +235,6 @@ const Settings = ( props ) => {
 					borderStyleLabel={ __( 'Style', 'ultimate-addons-for-gutenberg' ) }
 					borderWidthLabel={ __( 'Width', 'ultimate-addons-for-gutenberg' ) }
 					borderRadiusLabel={ __( 'Radius', 'ultimate-addons-for-gutenberg' ) }
-					borderColorLabel={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
-					borderHoverColorLabel={ __( 'Hover Color', 'ultimate-addons-for-gutenberg' ) }
 					prefix={ 'input' }
 					attributes={ attributes }
 					deviceType={ deviceType }

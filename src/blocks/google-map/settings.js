@@ -11,7 +11,6 @@ import UAGTextControl from '@Components/text-control';
 import { memo } from '@wordpress/element';
 
 const Settings = ( props ) => {
-	props = props.parentProps;
 
 	const {
 		setAttributes,
@@ -32,17 +31,15 @@ const Settings = ( props ) => {
 
 						<UAGTextControl
 							label={ __( 'Address', 'ultimate-addons-for-gutenberg' ) }
+							enableDynamicContent={ true }
+							dynamicContentType="text"
 							value={ address }
+							name="address"
 							data={ {
 								value: address,
 								label: 'address',
 							} }
 							setAttributes={ setAttributes }
-							onChange={ ( value ) =>
-								setAttributes( {
-									address: value,
-								} )
-							}
 							placeholder={ __( 'Type the address', 'ultimate-addons-for-gutenberg' ) }
 						/>
 						<Range

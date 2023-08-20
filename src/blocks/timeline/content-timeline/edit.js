@@ -13,6 +13,7 @@ import DynamicCSSLoader from '@Components/dynamic-css-loader';
 import DynamicFontLoader from './dynamicFontLoader';
 import { compose } from '@wordpress/compose';
 import AddStaticStyles from '@Controls/AddStaticStyles';
+import AddInitialAttr from '@Controls/addInitialAttr';
 
 const ContentTimelineComponent = ( props ) => {
 	const {
@@ -26,12 +27,6 @@ const ContentTimelineComponent = ( props ) => {
 	} = props;
 
 	useEffect( () => {
-		// Replacement for componentDidMount.
-		//Store client id.
-		setAttributes( { block_id: clientId } );
-		setAttributes( { classMigrate: true } );
-		setAttributes( { childMigrate: true } );
-
 		if ( attributes.timelinAlignment ) {
 			if ( 'none' === stack ) {
 				if ( undefined === timelinAlignmentTablet ) {
@@ -132,12 +127,13 @@ const ContentTimelineComponent = ( props ) => {
 		<>
 			<DynamicCSSLoader { ...{ blockStyling } } />
 			<DynamicFontLoader { ...{ attributes } } />
-			{ isSelected && <Settings parentProps={ props } /> }
-			<Render parentProps={ props } />
+			{ isSelected && <Settings { ...props } /> }
+			<Render { ...props } />
 		</>
 	);
 };
 
 export default compose(
+	AddInitialAttr,
 	AddStaticStyles,
 )( ContentTimelineComponent );

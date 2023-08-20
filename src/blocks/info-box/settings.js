@@ -32,7 +32,7 @@ let imageSizeOptions = [
 import UAGAdvancedPanelBody from '@Components/advanced-panel-body';
 
 const Settings = ( props ) => {
-	props = props.parentProps;
+
 	const { setAttributes, attributes, deviceType } = props;
 
 	// Setup the attributes.
@@ -45,6 +45,8 @@ const Settings = ( props ) => {
 		prefixColor,
 		prefixFontSize,
 		prefixFontSizeType,
+		prefixFontSizeTypeMobile,
+		prefixFontSizeTypeTablet,
 		prefixFontSizeTablet,
 		prefixFontSizeMobile,
 		prefixFontFamily,
@@ -57,9 +59,12 @@ const Settings = ( props ) => {
 		prefixTransform,
 		prefixDecoration,
 		prefixLoadGoogleFonts,
+		prefixHeadingTag,
 		headingTag,
 		headFontSize,
 		headFontSizeType,
+		headFontSizeTypeMobile,
+		headFontSizeTypeTablet,
 		headFontSizeTablet,
 		headFontSizeMobile,
 		headFontFamily,
@@ -72,6 +77,8 @@ const Settings = ( props ) => {
 		headLoadGoogleFonts,
 		subHeadFontSize,
 		subHeadFontSizeType,
+		subHeadFontSizeTypeMobile,
+		subHeadFontSizeTypeTablet,
 		subHeadFontSizeTablet,
 		subHeadFontSizeMobile,
 		subHeadFontFamily,
@@ -120,6 +127,8 @@ const Settings = ( props ) => {
 		ctaLinkColor,
 		ctaFontSize,
 		ctaFontSizeType,
+		ctaFontSizeTypeMobile,
+		ctaFontSizeTypeTablet,
 		ctaFontSizeMobile,
 		ctaFontSizeTablet,
 		ctaTransform,
@@ -329,7 +338,7 @@ const Settings = ( props ) => {
 	// Global Controls.
 	const imageIconPanel = () => {
 		return (
-			<UAGAdvancedPanelBody title={ __( 'Image/Icon', 'ultimate-addons-for-gutenberg' ) } initialOpen={ false }>
+			<UAGAdvancedPanelBody title={ __( 'Image/Icon', 'ultimate-addons-for-gutenberg' ) } initialOpen={ true }>
 				<ToggleControl
 					checked={ showIcon }
 					onChange={ () => setAttributes( { showIcon: ! showIcon } ) }
@@ -525,6 +534,28 @@ const Settings = ( props ) => {
 					onChange={ () => setAttributes( { showPrefix: ! showPrefix } ) }
 					label={ __( 'Enable Prefix', 'ultimate-addons-for-gutenberg' ) }
 				/>
+				{ showPrefix && (
+					<>
+						<MultiButtonsControl
+							setAttributes={ setAttributes }
+							label={ __( 'Prefix Tag', 'ultimate-addons-for-gutenberg' ) }
+							data={ {
+								value: prefixHeadingTag,
+								label: 'prefixHeadingTag',
+							} }
+							options={ [
+								{ value: 'h1', label: __( 'H1', 'ultimate-addons-for-gutenberg' ) },
+								{ value: 'h2', label: __( 'H2', 'ultimate-addons-for-gutenberg' ) },
+								{ value: 'h3', label: __( 'H3', 'ultimate-addons-for-gutenberg' ) },
+								{ value: 'h4', label: __( 'H4', 'ultimate-addons-for-gutenberg' ) },
+								{ value: 'h5', label: __( 'H5', 'ultimate-addons-for-gutenberg' ) },
+								{ value: 'h6', label: __( 'H6', 'ultimate-addons-for-gutenberg' ) },
+								{ value: 'p', label: __( 'P', 'ultimate-addons-for-gutenberg' ) },
+								{ value: 'span', label: __( 'Span', 'ultimate-addons-for-gutenberg' ) },
+							] }
+						/>
+					</>
+				) }
 
 				<ToggleControl
 					checked={ showTitle }
@@ -670,20 +701,20 @@ const Settings = ( props ) => {
 								presetInputType="radioImage"
 							/>
 						) }
-						<ToggleControl
-							checked={ inheritFromTheme }
-							onChange={ () =>
-								setAttributes( { inheritFromTheme: ! inheritFromTheme } )
-							}
-							label={ __(
-								'Inherit From Theme',
-								'ultimate-addons-for-gutenberg'
-							) }
-						/>
 					</>
 				) }
 				{ ctaType !== 'all' && ctaType !== 'none' && (
 					<>
+						<ToggleControl
+							checked={inheritFromTheme}
+							onChange={() =>
+								setAttributes( { inheritFromTheme: !inheritFromTheme } )
+							}
+							label={__(
+								'Inherit From Theme',
+								'ultimate-addons-for-gutenberg'
+							)}
+						/>
 						<ToggleControl
 							label={ __( 'Show Icon', 'ultimate-addons-for-gutenberg' ) }
 							checked={ showCtaIcon }
@@ -1186,6 +1217,14 @@ const Settings = ( props ) => {
 									value: prefixFontSizeType,
 									label: 'prefixFontSizeType',
 								} }
+								fontSizeTypeTablet={ {
+									value: prefixFontSizeTypeTablet,
+									label: 'prefixFontSizeTypeTablet',
+								} }
+								fontSizeTypeMobile={ {
+									value: prefixFontSizeTypeMobile,
+									label: 'prefixFontSizeTypeMobile',
+								} }
 								fontSize={ {
 									value: prefixFontSize,
 									label: 'prefixFontSize',
@@ -1347,6 +1386,14 @@ const Settings = ( props ) => {
 							fontSizeType={ {
 								value: headFontSizeType,
 								label: 'headFontSizeType',
+							} }
+							fontSizeTypeTablet={ {
+								value: headFontSizeTypeTablet,
+								label: 'headFontSizeTypeTablet',
+							} }
+							fontSizeTypeMobile={ {
+								value: headFontSizeTypeMobile,
+								label: 'headFontSizeTypeMobile',
 							} }
 							fontSize={ {
 								value: headFontSize,
@@ -1643,6 +1690,14 @@ const Settings = ( props ) => {
 									value: subHeadFontSizeType,
 									label: 'subHeadFontSizeType',
 								} }
+								fontSizeTypeTablet={ {
+									value: subHeadFontSizeTypeTablet,
+									label: 'subHeadFontSizeTypeTablet',
+								} }
+								fontSizeTypeMobile={ {
+									value: subHeadFontSizeTypeMobile,
+									label: 'subHeadFontSizeTypeMobile',
+								} }
 								fontSize={ {
 									value: subHeadFontSize,
 									label: 'subHeadFontSize',
@@ -1796,6 +1851,14 @@ const Settings = ( props ) => {
 								fontSizeType={ {
 									value: ctaFontSizeType,
 									label: 'ctaFontSizeType',
+								} }
+								fontSizeTypeTablet={ {
+									value: ctaFontSizeTypeTablet,
+									label: 'ctaFontSizeTypeTablet',
+								} }
+								fontSizeTypeMobile={ {
+									value: ctaFontSizeTypeMobile,
+									label: 'ctaFontSizeTypeMobile',
 								} }
 								fontSize={ {
 									value: ctaFontSize,
@@ -2165,7 +2228,7 @@ const Settings = ( props ) => {
 
 	const presetSettings = () => {
 		return (
-			<UAGAdvancedPanelBody title={ __( 'Presets', 'ultimate-addons-for-gutenberg' ) } initialOpen={ true }>
+			<UAGAdvancedPanelBody title={ __( 'Presets', 'ultimate-addons-for-gutenberg' ) } initialOpen={ false }>
 				<UAGPresets setAttributes={ setAttributes } presets={ infoBoxPresets } presetInputType="radioImage" />
 			</UAGAdvancedPanelBody>
 		);
@@ -2176,11 +2239,11 @@ const Settings = ( props ) => {
 			<InspectorControls>
 				<InspectorTabs>
 					<InspectorTab { ...UAGTabs.general }>
-						{ presetSettings() }
 						{ imageIconPanel() }
 						{ typographySettings() }
 						{ seperatorSettings() }
 						{ ctaSettings() }
+						{ presetSettings() }
 					</InspectorTab>
 					<InspectorTab { ...UAGTabs.style }>
 						{ styleSettings() }

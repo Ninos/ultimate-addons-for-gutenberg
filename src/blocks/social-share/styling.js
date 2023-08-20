@@ -6,9 +6,9 @@ import generateCSS from '@Controls/generateCSS';
 import generateCSSUnit from '@Controls/generateCSSUnit';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 
-function styling( attributes, clientId, name ) {
+function styling( attributes, clientId, name, deviceType ) {
 	const blockName = name.replace( 'uagb/', '' );
-
+	const previewType = deviceType.toLowerCase();
 	const {
 		align,
 		alignTablet,
@@ -30,6 +30,7 @@ function styling( attributes, clientId, name ) {
 		iconHoverColor,
 		iconBgColor,
 		iconBgHoverColor,
+		block_id
 	} = attributes;
 
 	const bgSizeFallback = getFallbackNumber( bgSize, 'bgSize', blockName );
@@ -40,16 +41,16 @@ function styling( attributes, clientId, name ) {
 	const gapMobileTabletFallback = isNaN( gapMobile ) ? gapTabletFallback : gapMobile;
 
 	const selectors = {
-		' a.uagb-ss__link': {
+		' span.uagb-ss__link': {
 			'color': iconColor,
 		},
-		' a.uagb-ss__link svg': {
+		' span.uagb-ss__link svg': {
 			'fill': iconColor,
 		},
-		' .uagb-ss-repeater:hover a.uagb-ss__link': {
+		' .uagb-ss-repeater:hover span.uagb-ss__link': {
 			'color': iconHoverColor,
 		},
-		' .uagb-ss-repeater:hover a.uagb-ss__link svg': {
+		' .uagb-ss-repeater:hover span.uagb-ss__link svg': {
 			'fill': iconHoverColor,
 		},
 		' .uagb-ss__wrapper': {
@@ -66,17 +67,20 @@ function styling( attributes, clientId, name ) {
 		'padding': generateCSSUnit( bgSizeFallback, 'px' ),
 		'margin-left': 0,
 		'margin-right': 0,
-		'margin-bottom': generateCSSUnit( gapFallback, 'px' ),
+		'margin-top': generateCSSUnit( gapFallback / 2, 'px' ),
+		'margin-bottom': generateCSSUnit( gapFallback / 2, 'px' ),
 	};
 	tabletSelectors[ '.uagb-social-share__layout-vertical .uagb-ss__wrapper' ] = {
 		'margin-left': 0,
 		'margin-right': 0,
-		'margin-bottom': generateCSSUnit( gapTablet, 'px' ),
+		'margin-top': generateCSSUnit( gapTabletFallback / 2, 'px' ),
+		'margin-bottom': generateCSSUnit( gapTabletFallback / 2, 'px' ),
 	};
 	mobileSelectors[ '.uagb-social-share__layout-vertical .uagb-ss__wrapper' ] = {
 		'margin-left': 0,
 		'margin-right': 0,
-		'margin-bottom': generateCSSUnit( gapMobile, 'px' ),
+		'margin-top': generateCSSUnit( gapMobileTabletFallback / 2, 'px' ),
+		'margin-bottom': generateCSSUnit( gapMobileTabletFallback / 2, 'px' ),
 	};
 
 	selectors[ '.uagb-social-share__layout-vertical.uagb-social-share__outer-wrap' ] = {
@@ -391,14 +395,27 @@ function styling( attributes, clientId, name ) {
 	};
 
 	let stylingCss = '';
-	const id = `.uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const id = `.uagb-block-${ block_id }`;
 
 	stylingCss = generateCSS( selectors, id );
 
-	stylingCss += generateCSS( tabletSelectors, `${ id }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		stylingCss += generateCSS(
+			tabletSelectors,
+			`${ id }`,
+			true,
+			'tablet'
+		);
 
-	stylingCss += generateCSS( mobileSelectors, `${ id }`, true, 'mobile' );
-
+		if( 'mobile' === previewType ){
+			stylingCss += generateCSS(
+				mobileSelectors,
+				`${ id }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return stylingCss;
 }
 

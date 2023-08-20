@@ -21,7 +21,6 @@ import UAGSelectControl from '@Components/select-control';
 import UAGAdvancedPanelBody from '@Components/advanced-panel-body';
 
 const Settings = ( props ) => {
-	props = props.parentProps;
 	const { attributes, deviceType, setAttributes } = props;
 	const {
 		block_id,
@@ -46,6 +45,8 @@ const Settings = ( props ) => {
 		headFontWeight,
 		headFontStyle,
 		headFontSizeType,
+		headFontSizeTypeMobile,
+		headFontSizeTypeTablet,
 		headFontSize,
 		headFontSizeMobile,
 		headFontSizeTablet,
@@ -69,6 +70,8 @@ const Settings = ( props ) => {
 		subHeadFontStyle,
 		subHeadFontSize,
 		subHeadFontSizeType,
+		subHeadFontSizeTypeMobile,
+		subHeadFontSizeTypeTablet,
 		subHeadFontSizeMobile,
 		subHeadFontSizeTablet,
 		subHeadLineHeight,
@@ -148,6 +151,8 @@ const Settings = ( props ) => {
 		highLightTransform,
 		highLightDecoration,
 		highLightFontSizeType,
+		highLightFontSizeTypeMobile,
+		highLightFontSizeTypeTablet,
 		highLightLineHeightType,
 		highLightFontSize,
 		highLightFontSizeTablet,
@@ -424,6 +429,24 @@ const Settings = ( props ) => {
 	const headingStylePanel = () => {
 		return (
 			<UAGAdvancedPanelBody title={ __( 'Heading', 'ultimate-addons-for-gutenberg' ) } initialOpen={ true }>
+
+				<ColorSwitchControl
+					label={ __( 'Text Color', 'ultimate-addons-for-gutenberg' ) }
+					type={ {
+						value: headingColorType,
+						label: 'headingColorType',
+					} }
+					classic={ {
+						value: headingColor,
+						label: 'headingColor',
+					} }
+					gradient={ {
+						value: headingGradientColor,
+						label: 'headingGradientColor',
+					} }
+					setAttributes={ setAttributes }
+				/>
+
 				<TypographyControl
 					label={ __( 'Typography', 'ultimate-addons-for-gutenberg' ) }
 					attributes={ attributes }
@@ -455,6 +478,14 @@ const Settings = ( props ) => {
 					fontSizeType={ {
 						value: headFontSizeType,
 						label: 'headFontSizeType',
+					} }
+					fontSizeTypeMobile={ {
+						value: headFontSizeTypeMobile,
+						label: 'headFontSizeTypeMobile',
+					} }
+					fontSizeTypeTablet={ {
+						value: headFontSizeTypeTablet,
+						label: 'headFontSizeTypeTablet',
 					} }
 					fontSize={ {
 						value: headFontSize,
@@ -502,22 +533,6 @@ const Settings = ( props ) => {
 					} }
 				/>
 
-				<ColorSwitchControl
-					label={ __( 'Text Color', 'ultimate-addons-for-gutenberg' ) }
-					type={ {
-						value: headingColorType,
-						label: 'headingColorType',
-					} }
-					classic={ {
-						value: headingColor,
-						label: 'headingColor',
-					} }
-					gradient={ {
-						value: headingGradientColor,
-						label: 'headingGradientColor',
-					} }
-					setAttributes={ setAttributes }
-				/>
 				<TextShadowControl
 					blockId={ block_id }
 					setAttributes={ setAttributes }
@@ -583,6 +598,17 @@ const Settings = ( props ) => {
 	const subHeadingStylePanel = () => {
 		return (
 			<UAGAdvancedPanelBody title={ __( 'Sub Heading', 'ultimate-addons-for-gutenberg' ) } initialOpen={ false }>
+
+				<AdvancedPopColorControl
+					label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
+					colorValue={ subHeadingColor ? subHeadingColor : '' }
+					data={ {
+						value: subHeadingColor,
+						label: 'subHeadingColor',
+					} }
+					setAttributes={ setAttributes }
+				/>
+
 				<TypographyControl
 					label={ __( 'Typography', 'ultimate-addons-for-gutenberg' ) }
 					attributes={ attributes }
@@ -614,6 +640,14 @@ const Settings = ( props ) => {
 					fontSizeType={ {
 						value: subHeadFontSizeType,
 						label: 'subHeadFontSizeType',
+					} }
+					fontSizeTypeMobile={ {
+						value: subHeadFontSizeTypeMobile,
+						label: 'subHeadFontSizeTypeMobile',
+					} }
+					fontSizeTypeTablet={ {
+						value: subHeadFontSizeTypeTablet,
+						label: 'subHeadFontSizeTypeTablet',
 					} }
 					fontSize={ {
 						value: subHeadFontSize,
@@ -661,15 +695,6 @@ const Settings = ( props ) => {
 					} }
 				/>
 
-				<AdvancedPopColorControl
-					label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
-					colorValue={ subHeadingColor ? subHeadingColor : '' }
-					data={ {
-						value: subHeadingColor,
-						label: 'subHeadingColor',
-					} }
-					setAttributes={ setAttributes }
-				/>
 				<ResponsiveSlider
 					label={ __( 'Bottom Spacing', 'ultimate-addons-for-gutenberg' ) }
 					data={ {
@@ -1008,7 +1033,7 @@ const Settings = ( props ) => {
 					}
 					hover={
 						<AdvancedPopColorControl
-							label={ __( 'Hover Color', 'ultimate-addons-for-gutenberg' ) }
+							label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
 							colorValue={ linkHColor }
 							data={ {
 								value: linkHColor,
@@ -1032,7 +1057,24 @@ const Settings = ( props ) => {
 						'ultimate-addons-for-gutenberg'
 					) }
 				</p>
-
+				<AdvancedPopColorControl
+					label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
+					colorValue={ highLightColor }
+					data={ {
+						value: highLightColor,
+						label: 'highLightColor',
+					} }
+					setAttributes={ setAttributes }
+				/>
+				<AdvancedPopColorControl
+					label={ __( 'Background', 'ultimate-addons-for-gutenberg' ) }
+					colorValue={ highLightBackground }
+					data={ {
+						value: highLightBackground,
+						label: 'highLightBackground',
+					} }
+					setAttributes={ setAttributes }
+				/>
 				<TypographyControl
 					label={ __( 'Typography', 'ultimate-addons-for-gutenberg' ) }
 					attributes={ attributes }
@@ -1064,6 +1106,14 @@ const Settings = ( props ) => {
 					fontSizeType={ {
 						value: highLightFontSizeType,
 						label: 'highLightFontSizeType',
+					} }
+					fontSizeTypeMobile={ {
+						value: highLightFontSizeTypeMobile,
+						label: 'highLightFontSizeTypeMobile',
+					} }
+					fontSizeTypeTablet={ {
+						value: highLightFontSizeTypeTablet,
+						label: 'highLightFontSizeTypeTablet',
 					} }
 					fontSize={ {
 						value: highLightFontSize,
@@ -1109,25 +1159,6 @@ const Settings = ( props ) => {
 						value: highLightLetterSpacingType,
 						label: 'highLightLetterSpacingType',
 					} }
-				/>
-
-				<AdvancedPopColorControl
-					label={ __( 'Background', 'ultimate-addons-for-gutenberg' ) }
-					colorValue={ highLightBackground }
-					data={ {
-						value: highLightBackground,
-						label: 'highLightBackground',
-					} }
-					setAttributes={ setAttributes }
-				/>
-				<AdvancedPopColorControl
-					label={ __( 'Color', 'ultimate-addons-for-gutenberg' ) }
-					colorValue={ highLightColor }
-					data={ {
-						value: highLightColor,
-						label: 'highLightColor',
-					} }
-					setAttributes={ setAttributes }
 				/>
 				<SpacingControl
 					label={ __( 'Padding', 'ultimate-addons-for-gutenberg' ) }

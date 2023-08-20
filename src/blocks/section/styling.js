@@ -6,8 +6,9 @@ import inlineStyles from './inline-styles';
 import generateCSS from '@Controls/generateCSS';
 import generateCSSUnit from '@Controls/generateCSSUnit';
 
-function styling( attributes, clientId ) {
+function styling( attributes, clientId, deviceType ) {
 	const {
+		block_id,
 		backgroundType,
 		backgroundVideoColor,
 		backgroundImageColor,
@@ -56,7 +57,7 @@ function styling( attributes, clientId ) {
 		gradientAngle,
 	} = attributes;
 	let inner_width = '100%';
-
+	const previewType = deviceType.toLowerCase();
 	if ( typeof contentWidth !== 'undefined' ) {
 		if ( 'boxed' !== contentWidth ) {
 			if ( typeof innerWidth !== 'undefined' ) {
@@ -233,14 +234,27 @@ function styling( attributes, clientId ) {
 		);
 	}
 	let stylingCss = '';
-	const id = `.uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const id = `.uagb-block-${ block_id }`;
 
 	stylingCss = generateCSS( selectors, id );
 
-	stylingCss += generateCSS( tabletSelectors, `${ id }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		stylingCss += generateCSS(
+			tabletSelectors,
+			`${ id }`,
+			true,
+			'tablet'
+		);
 
-	stylingCss += generateCSS( mobileSelectors, `${ id }`, true, 'mobile' );
-
+		if( 'mobile' === previewType ){
+			stylingCss += generateCSS(
+				mobileSelectors,
+				`${ id }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return stylingCss;
 }
 

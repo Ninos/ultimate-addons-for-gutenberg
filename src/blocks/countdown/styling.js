@@ -9,8 +9,10 @@ import generateShadowCSS from '@Controls/generateShadowCSS';
 import { getFallbackNumber } from '@Controls/getAttributeFallback';
 import { applyFilters } from '@wordpress/hooks';
 
-export default function styling( attributes, clientId, name ) {
+export default function styling( attributes, clientId, name, deviceType ) {
+	const previewType = deviceType.toLowerCase();
 	const {
+		block_id,
 		showDays,
 		showHours,
 		showMinutes,
@@ -22,6 +24,8 @@ export default function styling( attributes, clientId, name ) {
 		digitColor,
 		digitDecoration,
 		digitFontSizeType,
+		digitFontSizeTypeMobile,
+		digitFontSizeTypeTablet,
 		digitFontSizeMobile,
 		digitFontSizeTablet,
 		digitLineHeight,
@@ -41,6 +45,8 @@ export default function styling( attributes, clientId, name ) {
 		labelTransform,
 		labelDecoration,
 		labelFontSizeType,
+		labelFontSizeTypeMobile,
+		labelFontSizeTypeTablet,
 		labelFontSizeMobile,
 		labelFontSizeTablet,
 		labelLineHeight,
@@ -58,6 +64,8 @@ export default function styling( attributes, clientId, name ) {
 		separatorFontSize,
 		separatorColor,
 		separatorFontSizeType,
+		separatorFontSizeTypeMobile,
+		separatorFontSizeTypeTablet,
 		separatorFontSizeMobile,
 		separatorFontSizeTablet,
 		separatorLineHeight,
@@ -354,14 +362,14 @@ export default function styling( attributes, clientId, name ) {
 	tabletSelectors[ '.wp-block-uagb-countdown .wp-block-uagb-countdown__box:not(:first-child)' ] = {}; // Empty ruleset to prevent undefined error (for RTL Box Gap).
 
 	tabletSelectors[ '.wp-block-uagb-countdown .wp-block-uagb-countdown__time' ] = {
-		'font-size': generateCSSUnit( digitFontSizeTablet, digitFontSizeType ),
+		'font-size': generateCSSUnit( digitFontSizeTablet, digitFontSizeTypeTablet ),
 		'line-height': generateCSSUnit( digitLineHeightTablet, digitLineHeightType ),
 		'letter-spacing': generateCSSUnit( digitLetterSpacingTablet, digitLetterSpacingType ),
 	};
 
 	tabletSelectors[ '.wp-block-uagb-countdown div.wp-block-uagb-countdown__label' ] = {
 		'align-self': ! isSquareBox && boxFlexTablet === 'row' ? labelVerticalAlignmentTablet : 'unset',
-		'font-size': generateCSSUnit( labelFontSizeTablet, labelFontSizeType ),
+		'font-size': generateCSSUnit( labelFontSizeTablet, labelFontSizeTypeTablet ),
 		'line-height': generateCSSUnit( labelLineHeightTablet, labelLineHeightType ),
 		'letter-spacing': generateCSSUnit( labelLetterSpacingTablet, labelLetterSpacingType ),
 	};
@@ -400,14 +408,14 @@ export default function styling( attributes, clientId, name ) {
 	mobileSelectors[ '.wp-block-uagb-countdown .wp-block-uagb-countdown__box:not(:first-child)' ] = {}; // Empty ruleset to prevent undefined error (for RTL Box Gap).
 
 	mobileSelectors[ '.wp-block-uagb-countdown .wp-block-uagb-countdown__time' ] = {
-		'font-size': generateCSSUnit( digitFontSizeMobile, digitFontSizeType ),
+		'font-size': generateCSSUnit( digitFontSizeMobile, digitFontSizeTypeMobile ),
 		'line-height': generateCSSUnit( digitLineHeightMobile, digitLineHeightType ),
 		'letter-spacing': generateCSSUnit( digitLetterSpacingMobile, digitLetterSpacingType ),
 	};
 
 	mobileSelectors[ '.wp-block-uagb-countdown div.wp-block-uagb-countdown__label' ] = {
 		'align-self': ! isSquareBox && boxFlexMobile === 'row' ? labelVerticalAlignmentMobile : 'unset',
-		'font-size': generateCSSUnit( labelFontSizeMobile, labelFontSizeType ),
+		'font-size': generateCSSUnit( labelFontSizeMobile, labelFontSizeTypeMobile ),
 		'line-height': generateCSSUnit( labelLineHeightMobile, labelLineHeightType ),
 		'letter-spacing': generateCSSUnit( labelLetterSpacingMobile, labelLetterSpacingType ),
 	};
@@ -428,14 +436,14 @@ export default function styling( attributes, clientId, name ) {
 		};
 
 		tabletSelectors[ separatorSelector ] = {
-			'font-size': generateCSSUnit( separatorFontSizeTablet, separatorFontSizeType ),
+			'font-size': generateCSSUnit( separatorFontSizeTablet, separatorFontSizeTypeTablet ),
 			'line-height': generateCSSUnit( separatorLineHeightTablet, separatorLineHeightType ),
 			'right': generateCSSUnit( -separatorRightSpacingTabletFallback, 'px' ),
 			'top': generateCSSUnit( separatorTopSpacingTabletFallback, 'px' ),
 		};
 
 		mobileSelectors[ separatorSelector ] = {
-			'font-size': generateCSSUnit( separatorFontSizeMobile, separatorFontSizeType ),
+			'font-size': generateCSSUnit( separatorFontSizeMobile, separatorFontSizeTypeMobile ),
 			'line-height': generateCSSUnit( separatorLineHeightMobile, separatorLineHeightType ),
 			'right': generateCSSUnit( -separatorRightSpacingMobileFallback, 'px' ),
 			'top': generateCSSUnit( separatorTopSpacingMobileFallback, 'px' ),
@@ -456,7 +464,7 @@ export default function styling( attributes, clientId, name ) {
 		mobileSelectors[ boxGapSelectorRTL ][ 'margin-right' ] = generateCSSUnit( boxSpacingFallbackMobile, 'px' );
 	}
 
-	const baseSelector = `.editor-styles-wrapper .uagb-block-${ clientId.substr( 0, 8 ) }`;
+	const baseSelector = `.editor-styles-wrapper .uagb-block-${ block_id }`;
 
 	selectors = applyFilters( `spectra.${ blockName }.styling`, selectors, attributes );
 	tabletSelectors = applyFilters( `spectra.${ blockName }.tabletStyling`, tabletSelectors, attributes );
@@ -464,9 +472,22 @@ export default function styling( attributes, clientId, name ) {
 
 	let styling_css = generateCSS( selectors, baseSelector );
 
-	styling_css += generateCSS( tabletSelectors, `${ baseSelector }`, true, 'tablet' );
+	if( 'tablet' === previewType || 'mobile' === previewType ) {
+		styling_css += generateCSS(
+			tabletSelectors,
+			`${ baseSelector }`,
+			true,
+			'tablet'
+		);
 
-	styling_css += generateCSS( mobileSelectors, `${ baseSelector }`, true, 'mobile' );
-
+		if( 'mobile' === previewType ){
+			styling_css += generateCSS(
+				mobileSelectors,
+				`${ baseSelector }`,
+				true,
+				'mobile'
+			);
+		}
+	}
 	return styling_css;
 }

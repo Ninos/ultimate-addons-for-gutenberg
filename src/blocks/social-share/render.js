@@ -18,10 +18,9 @@ const Render = ( props ) => {
 		};
 	}, [] );
 
-	props = props.parentProps;
 	const { attributes, deviceType } = props;
 
-	const { className, social_layout } = attributes;
+	const { className, social_layout, block_id } = attributes;
 
 	const getSocialShareTemplate = [
 		[
@@ -85,7 +84,7 @@ const Render = ( props ) => {
 				'uagb-social-share__outer-wrap',
 				`uagb-social-share__layout-${ social_layout }`,
 				`uagb-editor-preview-mode-${ deviceType.toLowerCase() }`,
-				`uagb-block-${ props.clientId.substr( 0, 8 ) }`
+				`uagb-block-${ block_id }`
 			) }
 		>
 			<InnerBlocks

@@ -15,12 +15,12 @@ const Render = ( props ) => {
 		};
 	}, [] );
 
-	props = props.parentProps;
 	// Setup the attributes.
 	const {
 		className,
-		attributes: { tm_content, timelineItem },
-		deviceType
+		attributes: { tm_content, timelineItem, block_id },
+		attributes,
+		deviceType,
 	} = props;
 
 	const getContentTimelineTemplate = useMemo( () => {
@@ -39,9 +39,9 @@ const Render = ( props ) => {
 				className,
 				'uagb-timeline__outer-wrap',
 				`uagb-editor-preview-mode-${ deviceType.toLowerCase() }`,
-				`uagb-block-${ props.clientId.substr( 0, 8 ) }`,
+				`uagb-block-${ block_id }`,
 				'uagb-timeline__content-wrap',
-				...ContentTmClasses( props.attributes, deviceType )
+				...ContentTmClasses( attributes, deviceType )
 			) }
 		>
 			<InnerBlocks

@@ -23,8 +23,8 @@ import { Icon, ToggleControl } from '@wordpress/components';
 import UAGAdvancedPanelBody from '@Components/advanced-panel-body';
 
 const Settings = ( props ) => {
-	props = props.parentProps;
-	const { setAttributes, attributes, deviceType } = props;
+
+	const { setAttributes, attributes, deviceType, clientId } = props;
 
 	// Setup the attributes.
 	const {
@@ -155,7 +155,7 @@ const Settings = ( props ) => {
 	} = attributes;
 
 	const setImgAlign = ( value ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.imgAlign = value;
@@ -164,7 +164,7 @@ const Settings = ( props ) => {
 	};
 
 	const setShowImage = ( value ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.showImage = value;
@@ -173,7 +173,7 @@ const Settings = ( props ) => {
 	};
 
 	const setimageSize = ( value ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.imageSize = value;
@@ -182,7 +182,7 @@ const Settings = ( props ) => {
 	};
 
 	const setheadingTag = ( value ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.headingTag = value;
@@ -191,7 +191,7 @@ const Settings = ( props ) => {
 	};
 
 	const setimagePosition = ( value ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.imagePosition = value;
@@ -200,7 +200,7 @@ const Settings = ( props ) => {
 	};
 
 	const setColumns = ( column, tcolumn, mcolumn ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.columns = column;
 			pricelistChild.attributes.tcolumns = tcolumn;
@@ -209,7 +209,7 @@ const Settings = ( props ) => {
 	};
 
 	const setimageAlignment = ( value ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.imageAlignment = value;
@@ -218,7 +218,7 @@ const Settings = ( props ) => {
 	};
 
 	const setStack = ( value ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.stack = value;
@@ -227,7 +227,7 @@ const Settings = ( props ) => {
 	};
 
 	const setWidth = () => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.imageWidth = imageWidth;
@@ -239,7 +239,7 @@ const Settings = ( props ) => {
 	}, [ imageWidth ] );
 
 	const setHeadingAlign = ( value ) => {
-		const getChildBlocks = select( 'core/block-editor' ).getBlocks( props.clientId );
+		const getChildBlocks = select( 'core/block-editor' ).getBlocks( clientId );
 
 		getChildBlocks.forEach( ( pricelistChild ) => {
 			pricelistChild.attributes.headingAlign = value;
@@ -545,40 +545,6 @@ const Settings = ( props ) => {
 							onChange={ setimageSize }
 							options={ imageSizeOptions }
 						/>
-						<ResponsiveSlider
-							label={ __( 'Width', 'ultimate-addons-for-gutenberg' ) }
-							data={ {
-								desktop: {
-									value: imageWidth,
-									label: 'imageWidth',
-								},
-								tablet: {
-									value: imageWidthTablet,
-									label: 'imageWidthTablet',
-								},
-								mobile: {
-									value: imageWidthMobile,
-									label: 'imageWidthMobile',
-								},
-							} }
-							min={ 0 }
-							max={ 500 }
-							unit={ {
-								value: imageWidthType,
-								label: 'imageWidthType',
-							} }
-							units={ [
-								{
-									name: __( 'Pixel', 'ultimate-addons-for-gutenberg' ),
-									unitValue: 'px',
-								},
-								{
-									name: __( 'Em', 'ultimate-addons-for-gutenberg' ),
-									unitValue: 'em',
-								},
-							] }
-							setAttributes={ setAttributes }
-						/>
 					</>
 				) }
 			</UAGAdvancedPanelBody>
@@ -588,6 +554,40 @@ const Settings = ( props ) => {
 	const imageStyles = () => {
 		return (
 			<UAGAdvancedPanelBody title={ __( 'Image', 'ultimate-addons-for-gutenberg' ) } initialOpen={ false }>
+				<ResponsiveSlider
+					label={ __( 'Width', 'ultimate-addons-for-gutenberg' ) }
+					data={ {
+						desktop: {
+							value: imageWidth,
+							label: 'imageWidth',
+						},
+						tablet: {
+							value: imageWidthTablet,
+							label: 'imageWidthTablet',
+						},
+						mobile: {
+							value: imageWidthMobile,
+							label: 'imageWidthMobile',
+						},
+					} }
+					min={ 0 }
+					max={ 500 }
+					unit={ {
+						value: imageWidthType,
+						label: 'imageWidthType',
+					} }
+					units={ [
+						{
+							name: __( 'Pixel', 'ultimate-addons-for-gutenberg' ),
+							unitValue: 'px',
+						},
+						{
+							name: __( 'Em', 'ultimate-addons-for-gutenberg' ),
+							unitValue: 'em',
+						},
+					] }
+					setAttributes={ setAttributes }
+				/>
 				<SpacingControl
 					{ ...props }
 					label={ __( 'Padding', 'ultimate-addons-for-gutenberg' ) }
@@ -1068,85 +1068,94 @@ const Settings = ( props ) => {
 	};
 	const presetSettings = () => {
 		return (
-			<UAGAdvancedPanelBody title={ __( 'Presets', 'ultimate-addons-for-gutenberg' ) } initialOpen={ true }>
+			<UAGAdvancedPanelBody title={ __( 'Presets', 'ultimate-addons-for-gutenberg' ) } initialOpen={ false }>
 				<UAGPresets setAttributes={ setAttributes } presets={ presets } presetInputType="radioImage" />
 			</UAGAdvancedPanelBody>
 		);
 	};
+
+	const generalSettings = () => {
+		return (
+			<>
+				<UAGAdvancedPanelBody title={ __( 'General', 'ultimate-addons-for-gutenberg' ) } initialOpen={ true }>
+					<ResponsiveSlider
+						label={ __( 'Columns', 'ultimate-addons-for-gutenberg' ) }
+						data={ {
+							desktop: {
+								value: columns,
+								label: 'columns',
+							},
+							tablet: {
+								value: tcolumns,
+								label: 'tcolumns',
+							},
+							mobile: {
+								value: mcolumns,
+								label: 'mcolumns',
+							},
+						} }
+						min={ 1 }
+						max={ Math.min( maxColumns, menu_item_count ) }
+						displayUnit={ false }
+						setAttributes={ setAttributes }
+						onChange={ setColumns( columns, tcolumns, mcolumns ) }
+					/>
+					<MultiButtonsControl
+						setAttributes={ setAttributes }
+						label={ __( 'Heading Tag', 'ultimate-addons-for-gutenberg' ) }
+						data={ {
+							value: headingTag,
+							label: 'headingTag',
+						} }
+						options={ [
+							{
+								value: 'h1',
+								label: __( 'H1', 'ultimate-addons-for-gutenberg' ),
+							},
+							{
+								value: 'h2',
+								label: __( 'H2', 'ultimate-addons-for-gutenberg' ),
+							},
+							{
+								value: 'h3',
+								label: __( 'H3', 'ultimate-addons-for-gutenberg' ),
+							},
+							{
+								value: 'h4',
+								label: __( 'H4', 'ultimate-addons-for-gutenberg' ),
+							},
+							{
+								value: 'h5',
+								label: __( 'H5', 'ultimate-addons-for-gutenberg' ),
+							},
+							{
+								value: 'h6',
+								label: __( 'H6', 'ultimate-addons-for-gutenberg' ),
+							},
+							{
+								value: 'span',
+								label: __( 'Span', 'ultimate-addons-for-gutenberg' ),
+							},
+							{
+								value: 'p',
+								label: __( 'P', 'ultimate-addons-for-gutenberg' ),
+							},
+						] }
+						onChange={ setheadingTag }
+					/>
+				</UAGAdvancedPanelBody>
+			</>
+		);
+	};
+
 	const inspectControl = () => {
 		return (
 			<InspectorControls>
 				<InspectorTabs>
 					<InspectorTab { ...UAGTabs.general }>
-						{ presetSettings() }
-						<UAGAdvancedPanelBody title={ __( 'General', 'ultimate-addons-for-gutenberg' ) } initialOpen={ false }>
-							<ResponsiveSlider
-								label={ __( 'Columns', 'ultimate-addons-for-gutenberg' ) }
-								data={ {
-									desktop: {
-										value: columns,
-										label: 'columns',
-									},
-									tablet: {
-										value: tcolumns,
-										label: 'tcolumns',
-									},
-									mobile: {
-										value: mcolumns,
-										label: 'mcolumns',
-									},
-								} }
-								min={ 1 }
-								max={ Math.min( maxColumns, menu_item_count ) }
-								displayUnit={ false }
-								setAttributes={ setAttributes }
-								onChange={ setColumns( columns, tcolumns, mcolumns ) }
-							/>
-							<MultiButtonsControl
-								setAttributes={ setAttributes }
-								label={ __( 'Heading Tag', 'ultimate-addons-for-gutenberg' ) }
-								data={ {
-									value: headingTag,
-									label: 'headingTag',
-								} }
-								options={ [
-									{
-										value: 'h1',
-										label: __( 'H1', 'ultimate-addons-for-gutenberg' ),
-									},
-									{
-										value: 'h2',
-										label: __( 'H2', 'ultimate-addons-for-gutenberg' ),
-									},
-									{
-										value: 'h3',
-										label: __( 'H3', 'ultimate-addons-for-gutenberg' ),
-									},
-									{
-										value: 'h4',
-										label: __( 'H4', 'ultimate-addons-for-gutenberg' ),
-									},
-									{
-										value: 'h5',
-										label: __( 'H5', 'ultimate-addons-for-gutenberg' ),
-									},
-									{
-										value: 'h6',
-										label: __( 'H6', 'ultimate-addons-for-gutenberg' ),
-									},
-									{
-										value: 'span',
-										label: __( 'Span', 'ultimate-addons-for-gutenberg' ),
-									},
-									{
-										value: 'p',
-										label: __( 'P', 'ultimate-addons-for-gutenberg' ),
-									},
-								] }
-								onChange={ setheadingTag }
-							/>
-						</UAGAdvancedPanelBody>
+						{ generalSettings() }
 						{ imageSettings() }
+						{ presetSettings() }
 					</InspectorTab>
 					<InspectorTab { ...UAGTabs.style }>
 						{ titleSettings() }

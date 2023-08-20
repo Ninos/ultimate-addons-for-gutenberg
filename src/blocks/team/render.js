@@ -15,7 +15,6 @@ const Render = ( props ) => {
 		};
 	}, [] );
 
-	props = props.parentProps;
 	const { className, setAttributes, attributes, mergeBlocks, insertBlocksAfter, onReplace, deviceType } = props;
 
 	const {
@@ -40,6 +39,7 @@ const Render = ( props ) => {
 		socialEnable,
 		stack,
 		imgWidth,
+		block_id,
 	} = attributes;
 
 	const titleHtml = (
@@ -174,7 +174,7 @@ const Render = ( props ) => {
 				`uagb-team__align-${ align }`,
 				`uagb-team__stack-${ stack }`,
 				`uagb-editor-preview-mode-${ deviceType.toLowerCase() }`,
-				`uagb-block-${ props.clientId.substr( 0, 8 ) }`
+				`uagb-block-${ block_id }`
 			) }
 		>
 			{ imgPosition === 'left' && imageHtml }

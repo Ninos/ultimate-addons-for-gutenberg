@@ -47,6 +47,7 @@
 	text-align: center;
 	word-break: break-word;
 	border-radius: inherit;
+	display: grid;
 }
 
 .uagb-tm__image-position-left .uagb-tm__content,
@@ -298,9 +299,13 @@
 			}
 		}
 	}
+}
 
-	.uagb-tm__desc {
-		margin-left: 20px;
-		margin-right: 20px;
+.entry-content {
+	.wp-block-uagb-testimonial
+	.is-carousel {
+		ul.slick-dots {
+			padding: unset; // To resolve an issue of dots are not in center on front-end, unseting padding of ul of slick-dots.
+		}
 	}
 }

@@ -18,11 +18,9 @@ const Render = ( props ) => {
 		};
 	}, [] );
 
-	props = props.parentProps;
-
 	const { attributes, setAttributes } = props;
 
-	const { className, image_icon, icon, image, parentSize, imgTagHeight } = attributes;
+	const { className, image_icon, icon, image, parentSize, imgTagHeight, block_id } = attributes;
 
 	const defaultedAlt = image && image?.alt ? image?.alt : '';
 
@@ -57,12 +55,12 @@ const Render = ( props ) => {
 				'uagb-ss-repeater',
 				'uagb-ss__wrapper',
 				className,
-				`uagb-block-${ props.clientId.substr( 0, 8 ) }`
+				`uagb-block-${ block_id }`
 			) }
 		>
-			<a className="uagb-ss__link" href="/" rel="noopener noreferrer">
+			<span className="uagb-ss__link" href="/">
 				<span className="uagb-ss__source-wrap">{ imageIconHtml }</span>
-			</a>
+			</span>
 		</div>
 	);
 };

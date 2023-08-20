@@ -36,10 +36,12 @@ import Separator from '@Components/separator';
 import UAGTabsControl from '@Components/tabs';
 import AdvancedPopColorControl from '@Components/color-control/advanced-pop-color-control';
 import UAGPresets from '@Components/presets';
-import SpectraHelperPanel from '@Components/spectra-helper-panel';
 import { boxShadowPresets, boxShadowHoverPresets } from './presets';
 import variantIcons from './variant-icons';
 import { uagbClassNames } from '@Utils/Helpers';
+import { applyFilters } from '@wordpress/hooks';
+
+import RepetitionSettings from './meta-settings/repetition';
 
 const Settings = ( props ) => {
 	const { attributes, setAttributes, deviceType } = props;
@@ -69,6 +71,7 @@ const Settings = ( props ) => {
 		hasOverlay,
 		isDismissable,
 		haltBackgroundInteraction,
+		willPushContent,
 		// ------------------------- CLOSE SETTINGS.
 		closeIcon,
 		closeIconPosition,
@@ -612,32 +615,35 @@ const Settings = ( props ) => {
 			) }
 			{ ( 'banner' === variantType ) && (
 				<>
-					<MultiButtonsControl
-						label={ __(
-							'Position',
-							'ultimate-addons-for-gutenberg'
-						) }
-						data={ {
-							value: popupPositionV,
-							label: 'popupPositionV',
-						} }
-						options={ [
-							{
-								value: 'flex-start',
-								label: __( 'Top', 'ultimate-addons-for-gutenberg' ),
-							},
-							{
-								value: 'flex-end',
-								label: __( 'Bottom', 'ultimate-addons-for-gutenberg' ),
-							},
-						] }
-						setAttributes={ setAttributes }
-						showIcons={ false }
-						help={ 'flex-start' === popupPositionV && __(
-							'Coming Soon: Push the page content downward with Top Info Bars',
-							'ultimate-addons-for-gutenberg'
-						) }
+					<ToggleControl
+						label={ __( 'Push Content', 'ultimate-addons-for-gutenberg' ) }
+						checked={ willPushContent }
+						onChange={ () => setAttributes( { willPushContent: ! willPushContent } ) }
 					/>
+					{ ! willPushContent && (
+						<MultiButtonsControl
+							label={ __(
+								'Position',
+								'ultimate-addons-for-gutenberg'
+							) }
+							data={ {
+								value: popupPositionV,
+								label: 'popupPositionV',
+							} }
+							options={ [
+								{
+									value: 'flex-start',
+									label: __( 'Top', 'ultimate-addons-for-gutenberg' ),
+								},
+								{
+									value: 'flex-end',
+									label: __( 'Bottom', 'ultimate-addons-for-gutenberg' ),
+								},
+							] }
+							setAttributes={ setAttributes }
+							showIcons={ false }
+						/>
+					) }
 				</>
 			) }
 		</UAGAdvancedPanelBody>
@@ -1309,19 +1315,8 @@ const Settings = ( props ) => {
 			) }
 		</UAGAdvancedPanelBody>
 	);
-	
-	// The Helper Panel Component for Popup Builder. 
-	const popupPageLevelHelper = () => (
-		<SpectraHelperPanel
-			message={ 'banner' === variantType ? __(
-				'Click the Spectra logo on the top right to change this info bar\'s behavioural settings',
-				'ultimate-addons-for-gutenberg'
-			) : __(
-				'Click the Spectra logo on the top right to change this popup\'s behavioural settings',
-				'ultimate-addons-for-gutenberg'
-			) }
-		/>
-	)
+
+	const popupGeneralMetaSettings = applyFilters( 'spectra.popup-builder.tab_general.repetition.before', <RepetitionSettings/> );
 
 	return (
 		<>
@@ -1333,9 +1328,9 @@ const Settings = ( props ) => {
 							<>
 								{ generalSettings() }
 								{ closeSettings() }
+								{ popupGeneralMetaSettings }
 							</>
 						) }
-						{ popupPageLevelHelper() }
 					</InspectorTab>
 					<InspectorTab { ...UAGTabs.style }>
 						{ popupStyling() }

@@ -16,6 +16,7 @@ import DynamicCSSLoader from '@Components/dynamic-css-loader';
 import { useSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import AddStaticStyles from '@Controls/AddStaticStyles';
+import AddInitialAttr from '@Controls/addInitialAttr';
 
 const PostTimelineComponent = ( props ) => {
 	const {
@@ -47,8 +48,6 @@ const PostTimelineComponent = ( props ) => {
 	const [ isTaxonomyLoading, setIsTaxonomyLoading ] = useState( false );
 
 	useEffect( () => {
-		//Store Client id.
-		setAttributes( { block_id: props.clientId } );
 		if ( timelinAlignment ) {
 			if ( 'none' === stack ) {
 				if ( undefined === timelinAlignmentTablet ) {
@@ -96,6 +95,7 @@ const PostTimelineComponent = ( props ) => {
 
 		if ( ! allTaxonomyStore && ! isTaxonomyLoading ) {
 			setIsTaxonomyLoading( true );
+			// We are not using the our wrapper getApiData function here because we need to pass any form data.
 			apiFetch( {
 				path: '/spectra/v1/all_taxonomy',
 			} ).then( ( data ) => {
@@ -169,12 +169,13 @@ const PostTimelineComponent = ( props ) => {
 			<DynamicCSSLoader { ...{ blockStyling } } />
 			<DynamicFontLoader { ...{ attributes } } />
 			{ isSelected && (
-				<Settings parentProps={ props } taxonomyList={ taxonomyList } categoriesList={ categoriesList } />
+				<Settings { ...props } taxonomyList={ taxonomyList } categoriesList={ categoriesList } />
 			) }
-			<Render parentProps={ props } latestPosts={ latestPosts } />
+			<Render { ...props } latestPosts={ latestPosts } />
 		</>
 	);
 };
 export default compose(
+	AddInitialAttr,
 	AddStaticStyles,
 )( PostTimelineComponent );
