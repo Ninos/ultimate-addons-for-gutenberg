@@ -186,9 +186,10 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 				wp_send_json_error( 400 );
 			}
 			$current_block_attributes = false;
+			$post_id                  = sanitize_text_field( $_POST['post_id'] );
 			$block_id                 = sanitize_text_field( $_POST['block_id'] );
 
-			$post_content = get_post_field( 'post_content', sanitize_text_field( $_POST['post_id'] ) );
+			$post_content = get_post_field( 'post_content', $post_id );
 
 			if ( has_block( 'uagb/forms', $post_content ) || has_block( 'core/block', $post_content ) ) {
 				$blocks = parse_blocks( $post_content );
@@ -228,7 +229,7 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 						continue;
 					}
 					if ( has_block( 'uagb/forms', $value['content'] ) ) {
-						$current_block_attributes = $this->recursive_inner_forms( parse_blocks( $value['content'] ), $block_id );
+						$current_block_attributes = $this->recursive_inner_forms( parse_blocks( $value['content'] ), $block_id ) ?: $current_block_attributes;
 						if ( is_array( $current_block_attributes ) && $current_block_attributes['block_id'] === $block_id ) {
 							break;
 						}
@@ -268,6 +269,8 @@ if ( ! class_exists( 'UAGB_Forms' ) ) {
 					}               
 				}
 			}
+
+			$current_block_attributes = apply_filters( 'uagb_forms_process_attributes', $current_block_attributes, $post_id, $block_id );
 
 			if ( empty( $current_block_attributes ) ) {
 				wp_send_json_error( 400 );
