@@ -1153,6 +1153,10 @@ const attributes = {
 			styleType: 'display-labels',
 		},
 	},
+	inheritFromTheme: {
+		type: 'boolean',
+		default: 'enabled' === uagb_blocks_info.btn_inherit_from_theme,
+	},
 	isPreview: {
 		type: 'boolean',
 		default: false,
