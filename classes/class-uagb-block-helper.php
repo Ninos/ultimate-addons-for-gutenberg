@@ -1776,7 +1776,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 			$file = UAGB_DIR . sprintf( 'includes/blocks/%s/attributes.php', sanitize_file_name( $block_name ) );
 
 			if( file_exists( $file ) ) {
-				$attributes = require $file;
+				$attributes = include $file;
 			}
 
 			if( ! isset( $attributes ) || ! is_array( $attributes ) ) {
