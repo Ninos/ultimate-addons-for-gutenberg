@@ -38,39 +38,21 @@ if ( empty( $border['border-color'] ) ) {
 	$border['border-color'] = 'inherit';
 }
 
-$bg_obj_desktop           = array(
-	'backgroundType'           => $attr['backgroundType'],
-	'backgroundImage'          => $attr['backgroundImageDesktop'],
-	'backgroundColor'          => $attr['backgroundColor'],
-	'gradientValue'            => $attr['gradientValue'],
-	'gradientColor1'           => $attr['gradientColor1'],
-	'gradientColor2'           => $attr['gradientColor2'],
-	'gradientType'             => $attr['gradientType'],
-	'gradientLocation1'        => $attr['gradientLocation1'],
-	'gradientLocation2'        => $attr['gradientLocation2'],
-	'gradientAngle'            => $attr['gradientAngle'],
-	'selectGradient'           => $attr['selectGradient'],
-	'backgroundRepeat'         => $attr['backgroundRepeatDesktop'],
-	'backgroundPosition'       => $attr['backgroundPositionDesktop'],
-	'backgroundSize'           => $attr['backgroundSizeDesktop'],
-	'backgroundAttachment'     => $attr['backgroundAttachmentDesktop'],
-	'backgroundImageColor'     => $attr['backgroundImageColor'],
-	'overlayType'              => $attr['overlayType'],
-	'overlayOpacity'           => $attr['overlayOpacity'],
-	'backgroundCustomSize'     => $attr['backgroundCustomSizeDesktop'],
-	'backgroundCustomSizeType' => $attr['backgroundCustomSizeType'],
-	'backgroundVideo'          => $attr['backgroundVideo'],
-	'backgroundVideoColor'     => $attr['backgroundVideoColor'],
-	'customPosition'           => $attr['customPosition'],
-	'xPosition'                => $attr['xPositionDesktop'],
-	'xPositionType'            => $attr['xPositionType'],
-	'yPosition'                => $attr['yPositionDesktop'],
-	'yPositionType'            => $attr['yPositionType'],
-);
-$container_bg_css_desktop = UAGB_Block_Helper::uag_get_background_obj( $bg_obj_desktop, 'no' );
-$container_bg_overlay_css = UAGB_Block_Helper::uag_get_background_obj( $bg_obj_desktop, 'yes' );
+$container_bg_css_desktop = UAGB_Block_Helper::get_background_css_by_device( $attr, 'Desktop', 'no' );
+$container_bg_css_tablet  = UAGB_Block_Helper::get_background_css_by_device( $attr, 'Tablet', 'no' );
+$container_bg_css_mobile  = UAGB_Block_Helper::get_background_css_by_device( $attr, 'Mobile', 'no' );
 
-$video_bg_css = UAGB_Block_Helper::uag_get_background_obj( $bg_obj_desktop );
+$container_bg_overlay_css        = array();
+$container_bg_overlay_css_mobile = array();
+$container_bg_overlay_css_tablet = array();
+
+if ( $attr['overlayType'] ) {
+	$container_bg_overlay_css        = UAGB_Block_Helper::get_background_css_by_device( $attr, 'Desktop', 'yes' );
+	$container_bg_overlay_css_tablet = UAGB_Block_Helper::get_background_css_by_device( $attr, 'Tablet', 'yes' );
+	$container_bg_overlay_css_mobile = UAGB_Block_Helper::get_background_css_by_device( $attr, 'Mobile', 'yes' );
+}
+
+$video_bg_css = UAGB_Block_Helper::get_background_css_by_device( $attr, 'Desktop', 'no' );
 
 // Tablet.
 $left_padding_tablet   = '' !== $attr['leftPaddingTablet'] ? $attr['leftPaddingTablet'] : $attr['leftPaddingDesktop'];
@@ -192,36 +174,7 @@ if ( '' !== $attr['bottomWidth'] ) {
 	$selectors[ '.uagb-block-' . $id . ' .uagb-container__shape-bottom svg' ]['width'] = 'calc( ' . $attr['bottomWidth'] . '% + 1.3px )';
 }
 
-$bg_obj_tablet              = array(
-	'backgroundType'           => $attr['backgroundType'],
-	'backgroundImage'          => $attr['backgroundImageTablet'],
-	'backgroundColor'          => $attr['backgroundColor'],
-	'gradientValue'            => $attr['gradientValue'],
-	'gradientColor1'           => $attr['gradientColor1'],
-	'gradientColor2'           => $attr['gradientColor2'],
-	'gradientType'             => $attr['gradientType'],
-	'gradientLocation1'        => $attr['gradientLocation1'],
-	'gradientLocation2'        => $attr['gradientLocation2'],
-	'gradientAngle'            => $attr['gradientAngle'],
-	'selectGradient'           => $attr['selectGradient'],
-	'backgroundRepeat'         => $attr['backgroundRepeatTablet'],
-	'backgroundPosition'       => $attr['backgroundPositionTablet'],
-	'backgroundSize'           => $attr['backgroundSizeTablet'],
-	'backgroundAttachment'     => $attr['backgroundAttachmentTablet'],
-	'backgroundImageColor'     => $attr['backgroundImageColor'],
-	'overlayType'              => $attr['overlayType'],
-	'backgroundCustomSize'     => $attr['backgroundCustomSizeTablet'],
-	'backgroundCustomSizeType' => $attr['backgroundCustomSizeType'],
-	'backgroundVideo'          => $attr['backgroundVideo'],
-	'backgroundVideoColor'     => $attr['backgroundVideoColor'],
-	'customPosition'           => $attr['customPosition'],
-	'xPosition'                => $attr['xPositionTablet'],
-	'xPositionType'            => $attr['xPositionTypeTablet'],
-	'yPosition'                => $attr['yPositionTablet'],
-	'yPositionType'            => $attr['yPositionTypeTablet'],
-);
-$container_bg_css_tablet    = UAGB_Block_Helper::uag_get_background_obj( $bg_obj_tablet, 'no' );
-$container_tablet_css       = array_merge(
+$container_tablet_css = array_merge(
 	array(
 		'min-height'     => UAGB_Helper::get_css_value( $attr['minHeightTablet'], $attr['minHeightTypeTablet'] ),
 		'padding-top'    => UAGB_Helper::get_css_value( $top_padding_tablet, $attr['paddingTypeTablet'] ),
@@ -237,7 +190,11 @@ $container_tablet_css       = array_merge(
 	),
 	$border_tablet
 );
-$container_tablet_css       = array_merge( $container_tablet_css, $container_bg_css_tablet );
+
+if ( ! empty( $container_bg_css_tablet ) ) {
+	$container_tablet_css = array_merge( $container_tablet_css, $container_bg_css_tablet );
+}
+
 $inner_container_tablet_css = array(
 	'flex-direction'  => $attr['directionTablet'],
 	'align-items'     => $attr['alignItemsTablet'],
@@ -263,36 +220,7 @@ $t_selectors = array(
 	),
 );
 
-$bg_obj_mobile              = array(
-	'backgroundType'           => $attr['backgroundType'],
-	'backgroundImage'          => $attr['backgroundImageMobile'],
-	'backgroundColor'          => $attr['backgroundColor'],
-	'gradientValue'            => $attr['gradientValue'],
-	'gradientColor1'           => $attr['gradientColor1'],
-	'gradientColor2'           => $attr['gradientColor2'],
-	'gradientType'             => $attr['gradientType'],
-	'gradientLocation1'        => $attr['gradientLocation1'],
-	'gradientLocation2'        => $attr['gradientLocation2'],
-	'gradientAngle'            => $attr['gradientAngle'],
-	'selectGradient'           => $attr['selectGradient'],
-	'backgroundRepeat'         => $attr['backgroundRepeatMobile'],
-	'backgroundPosition'       => $attr['backgroundPositionMobile'],
-	'backgroundSize'           => $attr['backgroundSizeMobile'],
-	'backgroundAttachment'     => $attr['backgroundAttachmentMobile'],
-	'backgroundImageColor'     => $attr['backgroundImageColor'],
-	'overlayType'              => $attr['overlayType'],
-	'backgroundCustomSize'     => $attr['backgroundCustomSizeMobile'],
-	'backgroundCustomSizeType' => $attr['backgroundCustomSizeType'],
-	'backgroundVideo'          => $attr['backgroundVideo'],
-	'backgroundVideoColor'     => $attr['backgroundVideoColor'],
-	'customPosition'           => $attr['customPosition'],
-	'xPosition'                => $attr['xPositionMobile'],
-	'xPositionType'            => $attr['xPositionTypeMobile'],
-	'yPosition'                => $attr['yPositionMobile'],
-	'yPositionType'            => $attr['yPositionTypeMobile'],
-);
-$container_bg_css_mobile    = UAGB_Block_Helper::uag_get_background_obj( $bg_obj_mobile, 'no' );
-$container_mobile_css       = array_merge(
+$container_mobile_css = array_merge(
 	array(
 		'min-height'     => UAGB_Helper::get_css_value( $attr['minHeightMobile'], $attr['minHeightTypeMobile'] ),
 		'padding-top'    => UAGB_Helper::get_css_value( $top_padding_mobile, $attr['paddingTypeMobile'] ),
@@ -308,7 +236,11 @@ $container_mobile_css       = array_merge(
 	),
 	$border_mobile
 );
-$container_mobile_css       = array_merge( $container_mobile_css, $container_bg_css_mobile );
+
+if ( ! empty( $container_bg_css_mobile ) ) {
+	$container_mobile_css = array_merge( $container_mobile_css, $container_bg_css_mobile );
+}
+
 $inner_container_mobile_css = array(
 	'flex-direction'  => $attr['directionMobile'],
 	'align-items'     => $attr['alignItemsMobile'],
@@ -368,11 +300,8 @@ if ( 'video' === $attr['backgroundType'] ) {
 	$t_selectors[ '.uagb-block-' . $id . ' .uagb-container__video-wrap' ] = $border_tablet;
 	$m_selectors[ '.uagb-block-' . $id . ' .uagb-container__video-wrap' ] = $border_mobile;
 
-	if ( 'alignwide' === $attr['innerContentWidth'] && 'alignfull' === $attr['contentWidth'] ) {
-		$selectorClass = '.uagb-block-' . $id . ' .uagb-container-inner-blocks-wrap';
-	} else {
-		$selectorClass = '.wp-block-uagb-container.uagb-block-' . $id;
-	}
+	$selectorClass = '.wp-block-uagb-container.uagb-block-' . $id;
+
 	$selectors[ '.uagb-block-' . $id . ' > div:not(.uagb-container__video-wrap):not(.uagb-container__shape)' ] = array(
 		'position' => 'relative',
 	);
@@ -380,7 +309,7 @@ if ( 'video' === $attr['backgroundType'] ) {
 	$t_selectors[ $selectorClass ] = $inner_container_tablet_css;
 	$m_selectors[ $selectorClass ] = $inner_container_mobile_css;
 
-	$selectors[ '.uagb-block-' . $id ]   = array(
+	$selectors[ '.uagb-block-' . $id ] = array(
 		'min-height'     => UAGB_Helper::get_css_value( $attr['minHeightDesktop'], $attr['minHeightType'] ),
 		'box-shadow'     =>
 				UAGB_Helper::get_css_value( $attr['boxShadowHOffset'], 'px' ) .
@@ -406,6 +335,7 @@ if ( 'video' === $attr['backgroundType'] ) {
 		'column-gap'     => UAGB_Helper::get_css_value( $attr['columnGapDesktop'], $attr['columnGapType'] ),
 		'overflow'       => $attr['overflow'],
 	);
+	
 	$t_selectors[ '.uagb-block-' . $id ] = array(
 		'min-height'     => UAGB_Helper::get_css_value( $attr['minHeightTablet'], $attr['minHeightTypeTablet'] ),
 		'padding-top'    => UAGB_Helper::get_css_value( $top_padding_tablet, $attr['paddingTypeTablet'] ),
@@ -565,6 +495,16 @@ if (
 			),
 		)
 	);
+	if ( 'image' === $attr['overlayType'] ) {
+		$t_selectors[ '.uagb-block-' . $id . '::before' ] = array_merge(
+			$t_selectors[ '.uagb-block-' . $id . '::before' ],
+			$container_bg_overlay_css_tablet
+		);
+		$m_selectors[ '.uagb-block-' . $id . '::before' ] = array_merge(
+			$m_selectors[ '.uagb-block-' . $id . '::before' ],
+			$container_bg_overlay_css_mobile
+		);
+	};
 }//end if;
 
 $z_index        = isset( $attr['zIndex'] ) ? $attr['zIndex'] : '';
