@@ -1408,6 +1408,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 
 			return $desktop . $tab_styling_css . $mob_styling_css;
 		}
+
 		/**
 		 * Generates background CSS for a specific device type.
 		 *
@@ -1418,7 +1419,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 		 * @param string $device_type   The device type ('Desktop', 'Tablet', 'Mobile') for which to generate background CSS.
 		 * @param string $overlay      The overlay option ('no' or 'yes') to determine whether to include overlay CSS.
 		 *
-		 * @since x.x.x
+		 * @since 2.7.8
 		 * @return array               The background CSS object for the specified device type.
 		 */
 		public static function get_background_css_by_device( $attr, $device_type = 'Desktop', $overlay = 'no' ) {
@@ -1483,6 +1484,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 
 			return $container_bg_css;
 		}
+
 		/**
 		 * Background Control CSS Generator Function.
 		 *
@@ -1663,6 +1665,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 			
 			return 'yes' === $css_for_pseudo ? $gen_bg_overlay_css : $gen_bg_css;
 		}
+
 		/**
 		 * Border attribute generation Function.
 		 *
@@ -1728,6 +1731,7 @@ if ( ! class_exists( 'UAGB_Block_Helper' ) ) {
 
 			return $border_attr;
 		}
+
 		/**
 		 * Border attribute generation Function.
 		 *
