@@ -1,4 +1,4 @@
-const itemCount = 2;
+const itemCount = 1;
 
 const buttons = [];
 
@@ -425,6 +425,12 @@ const attributes = {
 		default: 'px',
 		UAGCopyPaste: {
 			styleType: 'main-title-letter-spacing-type',
+		},
+	},
+	verticalAlignment: {
+		type: 'string',
+		UAGCopyPaste: {
+			styleType: 'btn-vertical-align',
 		},
 	},
 };
